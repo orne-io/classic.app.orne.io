@@ -6,6 +6,14 @@ import TSConfigPaths from 'vite-tsconfig-paths';
 export default defineConfig({
 	plugins: [React(), TSConfigPaths()],
 
+	resolve: {
+		alias: {
+			'@terra-money/terra.js': '@terra-money/terra.js/dist/bundle.js',
+			'process': './src/polyfill/process-es6.js',
+			'readable-stream': 'vite-compatible-readable-stream/readable-browser.js',
+		},
+	},
+
 	server: {
 		https: {
 			cert: process.env.LOCALHOST_HTTPS_CERT,
