@@ -1,7 +1,15 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { defineConfig } from 'vite';
+import React from '@vitejs/plugin-react';
+import TSConfigPaths from 'vite-tsconfig-paths';
 
-// https://vitejs.dev/config/
+// https://vitejs.dev/config
 export default defineConfig({
-  plugins: [react()]
-})
+	plugins: [React(), TSConfigPaths()],
+
+	server: {
+		https: {
+			cert: process.env.LOCALHOST_HTTPS_CERT,
+			key: process.env.LOCALHOST_HTTPS_KEY,
+		},
+	},
+});
