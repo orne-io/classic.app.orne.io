@@ -1,9 +1,14 @@
+import { focusManager, QueryClient, QueryClientProvider } from 'react-query';
 import { BrowserRouter } from 'react-router-dom';
 import { WalletProvider } from '@terra-money/wallet-provider';
 import { GlobalStyle } from 'components/GlobalStyle';
-import { Header } from 'components/layout/Header';
+import { OrneProvider } from 'context/OrneProvider';
 import type { ReactNode } from 'react';
 import type { WalletControllerChainOptions } from '@terra-money/wallet-provider';
+
+patchReactQueryFocusRefetching();
+
+const queryClient = new QueryClient();
 
 type AppProvidersProps = {
 	children: ReactNode;
@@ -12,11 +17,40 @@ type AppProvidersProps = {
 export function AppProviders({ children, walletConnectChainIds, defaultNetwork }: AppProvidersProps) {
 	return (
 		<WalletProvider defaultNetwork={walletConnectChainIds[0]} walletConnectChainIds={walletConnectChainIds}>
-			<Header />
-
-			<BrowserRouter>{children}</BrowserRouter>
+			<BrowserRouter>
+				<QueryClientProvider client={queryClient}>
+					<OrneProvider>{children}</OrneProvider>
+				</QueryClientProvider>
+			</BrowserRouter>
 
 			<GlobalStyle />
 		</WalletProvider>
 	);
+}
+
+// @see https://github.com/Anchor-Protocol/anchor-web-app/blob/master/app/src/%40libs/patch-react-query-focus-refetching/index.ts
+export function patchReactQueryFocusRefetching(refetchInactiveTime: number = 1000 * 60) {
+	focusManager.setEventListener((handleFocus) => {
+		let lastInvisibleTime = -1;
+
+		function onVisibilityChange() {
+			if (document.hidden) {
+				lastInvisibleTime = Date.now();
+			} else if (lastInvisibleTime > 0) {
+				const t = Date.now() - lastInvisibleTime;
+				if (t > refetchInactiveTime) {
+					handleFocus(true);
+				}
+				lastInvisibleTime = -1;
+			}
+		}
+
+		if (typeof window !== 'undefined' && window.addEventListener) {
+			document.addEventListener('visibilitychange', onVisibilityChange, false);
+		}
+
+		return () => {
+			document.removeEventListener('visibilitychange', onVisibilityChange);
+		};
+	});
 }

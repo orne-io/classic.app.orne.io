@@ -8,6 +8,7 @@ specifiers:
   '@types/react-dom': ^17.0.10
   '@types/styled-components': ^5.1.18
   '@vitejs/plugin-react': ^1.0.7
+  big.js: ^6.1.1
   buffer: ^6.0.3
   cross-env: ^7.0.3
   prettier: ^2.5.1
@@ -25,6 +26,7 @@ dependencies:
   '@radix-ui/react-dropdown-menu': 0.1.4_5539cae010396b202b015f3568914e95
   '@terra-money/terra.js': 2.0.16
   '@terra-money/wallet-provider': 2.3.0_b4a747affa2313716ad44549f278426f
+  big.js: 6.1.1
   buffer: 6.0.3
   react: 17.0.2
   react-dom: 17.0.2_react@17.0.2
@@ -1089,6 +1091,10 @@ packages:
   /big-integer/1.6.51:
     resolution: {integrity: sha512-GPEid2Y9QU1Exl1rpO9B2IPJGHPSupF5GnVIP0blYvNOMer2bTvSWs1jGOUg04hTmu67nmLsQ9TBo1puaotBHg==}
     engines: {node: '>=0.6'}
+    dev: false
+
+  /big.js/6.1.1:
+    resolution: {integrity: sha512-1vObw81a8ylZO5ePrtMay0n018TcftpTA5HFKDaSuiUDBo8biRBtjIobw60OpwuvrGk+FsxKamqN4cnmj/eXdg==}
     dev: false
 
   /bindings/1.5.0:

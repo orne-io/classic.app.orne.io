@@ -1,4 +1,5 @@
-import { HumanAddr } from 'types';
+import type { NetworkInfo } from '@terra-money/wallet-provider';
+import type { HumanAddr } from 'types';
 
 export const BOMBAY_CONTRACT_ADDRESS = {
 	token: 'terra182zp52a95r3qg6lt0njxr7l0ujkfwan5h7t3l6' as HumanAddr,
@@ -11,3 +12,7 @@ export const MAINNET_CONTRACT_ADDRESS = {
 	pair: '' as HumanAddr,
 	lp: '' as HumanAddr,
 };
+
+export function ORNE_CONTRACT_ADDRESS(network: NetworkInfo) {
+	return network.chainID.startsWith('bombay') ? BOMBAY_CONTRACT_ADDRESS : MAINNET_CONTRACT_ADDRESS;
+}
