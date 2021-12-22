@@ -1,7 +1,7 @@
 import { Routes, Route } from 'react-router-dom';
 import { useChainOptions } from '@terra-money/wallet-provider';
 import { AppProviders } from 'configuration/app';
-import { Header } from 'components/layout/Header';
+import { Shell } from 'components/layout/Shell';
 import { Home } from 'pages/Home';
 
 export function Application() {
@@ -10,11 +10,11 @@ export function Application() {
 	return (
 		chainOptions && (
 			<AppProviders {...chainOptions}>
-				<Header />
-
-				<Routes>
-					<Route index element={<Home />} />
-				</Routes>
+				<Shell>
+					<Routes>
+						<Route index element={<Home />} />
+					</Routes>
+				</Shell>
 			</AppProviders>
 		)
 	);
