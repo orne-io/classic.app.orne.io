@@ -32,6 +32,7 @@ export const GlobalStyle = createGlobalStyle`
 	}
 
 	body {
+		font-size: 1.18rem;
 		line-height: 1.5;
 		-webkit-font-smoothing: antialiased;
 	}

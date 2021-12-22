@@ -1,5 +1,6 @@
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import { ConnectType, useWallet } from '@terra-money/wallet-provider';
+import { Trigger, Balance, WalletAddress, WalletIcon, Content, Item } from './ButtonStyle';
 
 const ConnectionNameDict: Partial<Record<ConnectType, string>> = {
 	[ConnectType.CHROME_EXTENSION]: 'Extension',
@@ -14,15 +15,15 @@ export function ConnectWalletButton() {
 
 	return (
 		<DropdownMenu.Root>
-			<DropdownMenu.Trigger>Connect Wallet</DropdownMenu.Trigger>
+			<Trigger>Connect Wallet</Trigger>
 
-			<DropdownMenu.Content>
+			<Content>
 				{allowedConnection.map((connection) => (
-					<DropdownMenu.Item key={connection} onClick={() => connect(connection)}>
+					<Item key={connection} onClick={() => connect(connection)}>
 						{ConnectionNameDict[connection]}
-					</DropdownMenu.Item>
+					</Item>
 				))}
-			</DropdownMenu.Content>
+			</Content>
 		</DropdownMenu.Root>
 	);
 }

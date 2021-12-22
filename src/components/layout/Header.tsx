@@ -10,8 +10,10 @@ export function Header() {
 		<HeaderWrapper>
 			<Logo src="/images/orne-logo.svg" alt="Orne.io" />
 
-			{status === WalletStatus.WALLET_NOT_CONNECTED && <ConnectWalletButton />}
-			{status === WalletStatus.WALLET_CONNECTED && <WalletButton />}
+			<div>
+				{status === WalletStatus.WALLET_NOT_CONNECTED && <ConnectWalletButton />}
+				{status === WalletStatus.WALLET_CONNECTED && <WalletButton />}
+			</div>
 		</HeaderWrapper>
 	);
 }
