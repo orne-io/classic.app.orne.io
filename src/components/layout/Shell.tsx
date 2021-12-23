@@ -20,6 +20,7 @@ export function Shell({ children }: { children: ReactNode }) {
 
 const Main = styled(MaxWidthWrapper)`
 	grid-area: main;
+	width: 100%;
 `;
 
 const ShellWrapper = styled.div`

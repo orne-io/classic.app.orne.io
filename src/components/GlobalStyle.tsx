@@ -32,7 +32,6 @@ export const GlobalStyle = createGlobalStyle`
 	}
 
 	body {
-		font-size: 1.18rem;
 		line-height: 1.5;
 		-webkit-font-smoothing: antialiased;
 	}
@@ -81,10 +80,15 @@ export const GlobalStyle = createGlobalStyle`
 		background-color: var(--background-color);
 		color: var(--text-color);
 		font-family: 'Myriad Pro', sans-serif;
-	}
+		font-size: 1.4375rem;
+}
 
 	button {
 		cursor: pointer;
+		border: 0;
+	}
+	
+	input {
 		border: 0;
 	}
 `;

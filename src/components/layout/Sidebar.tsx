@@ -5,15 +5,15 @@ export function Sidebar() {
 	return (
 		<SidebarWrapper>
 			<Navigation>
-				<Link to="">
+				<Link to="/swap">
 					<Icon src="/icons/swap.svg" alt="" />
 					Swap
 				</Link>
-				<Link to="">
+				<Link to="/earn">
 					<Icon src="/icons/earn.svg" alt="" />
 					Earn
 				</Link>
-				<Link to="">
+				<Link to="/trees">
 					<Icon src="/icons/trees.svg" alt="" />
 					Trees
 				</Link>
