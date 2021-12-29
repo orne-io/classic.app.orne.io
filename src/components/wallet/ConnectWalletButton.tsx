@@ -3,14 +3,14 @@ import { ConnectType, useWallet } from '@terra-money/wallet-provider';
 import { Trigger, Balance, WalletAddress, WalletIcon, Content, Item } from './ButtonStyle';
 
 const ConnectionNameDict: Partial<Record<ConnectType, string>> = {
-	[ConnectType.CHROME_EXTENSION]: 'Extension',
+	[ConnectType.EXTENSION]: 'Extension',
 	[ConnectType.WALLETCONNECT]: 'Wallet Connect',
 };
 
 export function ConnectWalletButton() {
 	const { availableConnectTypes, connect } = useWallet();
 	const allowedConnection = availableConnectTypes.filter((c) =>
-		[ConnectType.CHROME_EXTENSION, ConnectType.WALLETCONNECT].includes(c)
+		[ConnectType.EXTENSION, ConnectType.WALLETCONNECT].includes(c)
 	);
 
 	return (
