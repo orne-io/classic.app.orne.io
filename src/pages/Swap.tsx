@@ -1,21 +1,56 @@
+import { useState } from 'react';
 import styled from 'styled-components';
+import { useOrneBalance } from '../hooks/useOrneBalance';
+import type { ChangeEvent, FormEvent } from 'react';
+
+const regex = /^[0-9.]*$/;
 
 export function Swap() {
+	const { data } = useOrneBalance();
+
+	const [amount, setAmount] = useState<string>('');
+	const [slippage, setSlippage] = useState<number>(1);
+	const [customSlippage, setCustomSlippage] = useState<string>('');
+
+	function handleAmountChange(e: ChangeEvent<HTMLInputElement>) {
+		const value = e.currentTarget.value;
+
+		if (regex.test(value)) {
+			setAmount(value);
+		}
+	}
+
+	function handleCustomSlippageChange(e: ChangeEvent<HTMLInputElement>) {
+		const value = e.currentTarget.value;
+
+		if (regex.test(value)) {
+			setCustomSlippage(value);
+		}
+	}
+
+	function swap(e: FormEvent) {
+		e.preventDefault();
+
+		if (!amount) {
+			return;
+		}
+	}
+
 	return (
 		<article>
 			<header>
 				<PageTitle>Swap</PageTitle>
 				<PageDescription>Instantly trade $ORNE and UST</PageDescription>
 			</header>
-			<SwapSection>
+			<SwapSection onSubmit={swap}>
 				<Content>
 					<InputBlock>
 						<div>
-							<span>Balance 103</span>
+							<span>Balance {data?.balance || 0}</span>
 							<button>MAX</button>
 						</div>
 						<InputWrapper>
-							<input type="text" />
+							<input id="amount" name="amount" type="text" value={amount} onChange={handleAmountChange} />
 							<span>UST</span>
 						</InputWrapper>
 					</InputBlock>
@@ -62,10 +97,16 @@ export function Swap() {
 					<MetaBlock style={{ gridColumn: 3 }}>
 						<label htmlFor="slippage">Slippage</label>
 						<div>
-							<button>0.5%</button>
-							<button>1%</button>
-							<button>4%</button>
-							<input id="slippage" name="slippage" type="text" />
+							<button onClick={() => setSlippage(0.5)}>0.5%</button>
+							<button onClick={() => setSlippage(1)}>1%</button>
+							<button onClick={() => setSlippage(4)}>4%</button>
+							<input
+								id="slippage"
+								name="slippage"
+								type="text"
+								value={customSlippage}
+								onChange={handleCustomSlippageChange}
+							/>
 						</div>
 
 						<button type="submit">Swap</button>
