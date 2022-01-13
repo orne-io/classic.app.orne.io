@@ -45,11 +45,11 @@ export function Swap() {
 			<SwapSection autoComplete="off" onSubmit={swap}>
 				<Content>
 					<InputBlock>
-						<BalanceControl>
+						<InputHeader>
 							<div>Balance</div>
 							<span className="balance">{data?.balance || 0}</span>
 							<button>Max</button>
-						</BalanceControl>
+						</InputHeader>
 						<InputWrapper>
 							<PriceInput
 								id="amount"
@@ -99,9 +99,9 @@ export function Swap() {
 
 				<Content>
 					<InputBlock>
-						<div>
+						<InputHeader>
 							<span>Estimated</span>
-						</div>
+						</InputHeader>
 						<InputWrapper>
 							<PriceInput type="text" value="0" disabled />
 							<TokenSymbol>
@@ -213,10 +213,11 @@ const TokenIcon = styled.div`
 	background: white;
 `;
 
-const BalanceControl = styled.div`
+const InputHeader = styled.div`
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+	margin-bottom: var(--space-2);
 
 	.balance {
 		margin-left: auto;
