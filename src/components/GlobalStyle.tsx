@@ -1,4 +1,4 @@
-import { createGlobalStyle } from 'styled-components';
+import styled, { createGlobalStyle } from 'styled-components';
 
 export const GlobalStyle = createGlobalStyle`
 	@font-face {
@@ -47,6 +47,12 @@ export const GlobalStyle = createGlobalStyle`
 
 	p, h1, h2, h3, h4, h5, h6 {
 		overflow-wrap: break-word;
+	}
+
+	article {
+		header {
+			margin-bottom: var(--space-6);
+		}
 	}
 
 	#app {
@@ -107,6 +113,17 @@ export const GlobalStyle = createGlobalStyle`
 			}
 		}
 
+		&.outline-dark {
+			color: var(--dark-green);
+			border-color: var(--dark-green);
+			background-color: transparent;
+			
+			:hover {
+				color: white;
+				background-color: var(--dark-green);
+			}
+		}
+
 		:hover {
 			background-color: var(--dark-green);
 		}
@@ -115,4 +132,23 @@ export const GlobalStyle = createGlobalStyle`
 	input {
 		border: 0;
 	}
+`;
+
+export const PageTitle = styled.h1`
+	border-left: 5px solid var(--text-color);
+	font-size: 2rem;
+	padding-left: var(--space-3);
+`;
+
+export const PageDescription = styled.p`
+	margin-top: var(--space-3);
+`;
+
+export const TokenIcon = styled.div`
+	margin-right: var(--space-2);
+	padding: 8px;
+	width: 32px;
+	height: 32px;
+	border-radius: 50%;
+	background: white;
 `;

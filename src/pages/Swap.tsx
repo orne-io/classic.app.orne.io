@@ -2,6 +2,7 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import { useOrneBalance } from '../hooks/useOrneBalance';
 import type { ChangeEvent, FormEvent } from 'react';
+import { PageDescription, PageTitle, TokenIcon } from 'components/GlobalStyle';
 
 const regex = /^[0-9.]*$/;
 
@@ -48,7 +49,7 @@ export function Swap() {
 						<InputHeader>
 							<div>Balance</div>
 							<span className="balance">{data?.balance || 0}</span>
-							<button>Max</button>
+							<button className="outline-dark">Max</button>
 						</InputHeader>
 						<InputWrapper>
 							<PriceInput
@@ -140,22 +141,11 @@ export function Swap() {
 	);
 }
 
-const PageTitle = styled.h1`
-	border-left: 5px solid var(--text-color);
-	font-size: 2rem;
-	padding-left: var(--space-3);
-`;
-
-const PageDescription = styled.p`
-	margin-top: var(--space-3);
-`;
-
 const SwapSection = styled.form`
 	display: grid;
 	grid-template-columns: 1fr 70px 1fr;
 	grid-template-rows: repeat(2, min-content);
 	gap: var(--space-4);
-	margin-top: var(--space-6);
 `;
 
 const Content = styled.section`
@@ -204,15 +194,6 @@ const TokenSymbol = styled.div`
 	display: flex;
 `;
 
-const TokenIcon = styled.div`
-	margin-right: var(--space-2);
-	padding: 8px;
-	width: 32px;
-	height: 32px;
-	border-radius: 50%;
-	background: white;
-`;
-
 const InputHeader = styled.div`
 	display: flex;
 	justify-content: space-between;
@@ -228,16 +209,6 @@ const InputHeader = styled.div`
 		display: inline-block;
 		line-height: 1.3rem;
 		font-size: 1.2rem;
-		color: var(--text-color);
-		border-radius: var(--rounded);
-		border: 2px solid var(--text-color);
-		background-color: transparent;
-
-		:hover {
-			color: white;
-			border-color: var(--darker-green);
-			background-color: var(--darker-green);
-		}
 	}
 `;
 
@@ -286,6 +257,12 @@ const SlippageControl = styled.div`
 			border-color: var(--darker-green);
 			background-color: var(--darker-green);
 		}
+	}
+
+	button {
+		padding-left: 0px;
+		padding-right: 0px;
+		overflow: hidden;
 	}
 
 	input[type='text'] {
