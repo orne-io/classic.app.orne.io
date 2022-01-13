@@ -3,7 +3,7 @@ import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 
 export const Trigger = styled(DropdownMenu.Trigger)`
 	align-items: center;
-	background-color: var(--dark-green);
+	background-color: var(--darker-green);
 	border-radius: var(--rounded);
 	color: white;
 	display: inline-flex;

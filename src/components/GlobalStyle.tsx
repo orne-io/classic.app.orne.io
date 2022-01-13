@@ -58,7 +58,9 @@ export const GlobalStyle = createGlobalStyle`
 		--background-color: #f8f8f8;
 		--text-color: #537285;
 		--light-green: #e7f1ef;
-		--dark-green: #afd3cf;
+		--darker-green: #afd3cf;
+		--dark-green: #537285;
+		
 
 		--container-width: 960px;
 		--rounded: 5px;
