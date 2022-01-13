@@ -83,11 +83,33 @@ export const GlobalStyle = createGlobalStyle`
 		color: var(--text-color);
 		font-family: 'Myriad Pro', sans-serif;
 		font-size: 1.4375rem;
-}
+	}
 
 	button {
+		padding: var(--space-1) var(--space-3);
+		color: white;
+		border-width: 2px;
+		border-style: solid;
+		border-color: transparent;
+		border-radius: var(--rounded);
+		background-color: var(--darker-green);
 		cursor: pointer;
-		border: 0;
+		transition: 0.1s all;
+
+		&.outline {
+			color: var(--dark-green);
+			border-color: var(--darker-green);
+			background-color: transparent;
+
+			:hover {
+				border-color: var(--dark-green);
+				background-color: transparent;
+			}
+		}
+
+		:hover {
+			background-color: var(--dark-green);
+		}
 	}
 	
 	input {
