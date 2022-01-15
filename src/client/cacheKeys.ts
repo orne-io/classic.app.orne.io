@@ -4,4 +4,5 @@ export enum TERRA_QUERY_KEY {
 
 export enum ORNE_QUERY_KEY {
 	ORNE_BALANCE = 'ORNE_BALANCE',
+	ORNE_POOL = 'ORNE_POOL',
 }
