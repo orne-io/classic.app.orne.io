@@ -11,6 +11,7 @@ specifiers:
   big.js: ^6.1.1
   buffer: ^6.0.3
   cross-env: ^7.0.3
+  decimal.js: ^10.3.1
   prettier: ^2.5.1
   react: ^17.0.2
   react-dom: ^17.0.2
@@ -19,6 +20,7 @@ specifiers:
   react-router-dom: ^6.2.1
   styled-components: ^5.3.3
   typescript: ^4.5.4
+  use-debounce: ^7.0.1
   vite: ^2.7.10
   vite-compatible-readable-stream: ^3.6.0
   vite-tsconfig-paths: ^3.3.17
@@ -29,12 +31,14 @@ dependencies:
   '@terra-money/wallet-provider': 3.6.5_8e97936e553be6ba50d2a9690f577cb3
   big.js: 6.1.1
   buffer: 6.0.3
+  decimal.js: 10.3.1
   react: 17.0.2
   react-dom: 17.0.2_react@17.0.2
   react-is: 17.0.2
   react-query: 3.34.7_react-dom@17.0.2+react@17.0.2
   react-router-dom: 6.2.1_react-dom@17.0.2+react@17.0.2
   styled-components: 5.3.3_281a4fa50a045c9112baf635f3bc27a7
+  use-debounce: 7.0.1_react@17.0.2
   vite-compatible-readable-stream: 3.6.0
 
 devDependencies:
@@ -2396,6 +2400,15 @@ packages:
         optional: true
     dependencies:
       '@types/react': 17.0.38
+      react: 17.0.2
+    dev: false
+
+  /use-debounce/7.0.1_react@17.0.2:
+    resolution: {integrity: sha512-fOrzIw2wstbAJuv8PC9Vg4XgwyTLEOdq4y/Z3IhVl8DAE4svRcgyEUvrEXu+BMNgMoc3YND6qLT61kkgEKXh7Q==}
+    engines: {node: '>= 10.0.0'}
+    peerDependencies:
+      react: '>=16.8.0'
+    dependencies:
       react: 17.0.2
     dev: false
 

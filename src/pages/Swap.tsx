@@ -1,17 +1,33 @@
-import { useState } from 'react';
+import Decimal from 'decimal.js';
+import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-import { useOrneBalance } from '../hooks/useOrneBalance';
-import type { ChangeEvent, FormEvent } from 'react';
+import { useConnectedWallet, useLCDClient } from '@terra-money/wallet-provider';
 import { PageDescription, PageTitle, TokenIcon } from 'components/GlobalStyle';
+import { useTerraNativeBalances } from 'hooks/useTerraNativeBalances';
+import type { ChangeEvent, FormEvent } from 'react';
+import { useApp } from '../hooks/useApp';
+import { Coin, Fee, MsgExecuteContract } from '@terra-money/terra.js';
+import { computeSwapUstToOrneMessage } from '../hooks/useSwap';
+import { useEstimateFee } from '../hooks/useEstimateFee';
+import { Slippage } from '../components/tx/Slippage';
+import { useIsFirstRender } from '../hooks/useIsFirstRender';
+import { useDebounce } from 'use-debounce';
 
 const regex = /^[0-9.]*$/;
 
 export function Swap() {
-	const { data } = useOrneBalance();
+	const connectedWallet = useConnectedWallet();
+	const { contractAddress } = useApp();
+	const lcd = useLCDClient();
+	const { uUST } = useTerraNativeBalances();
+	const estimateFee = useEstimateFee();
 
+	const [error, setError] = useState('');
 	const [amount, setAmount] = useState<string>('');
+	const [debouncedAmount] = useDebounce(amount, 1000);
 	const [slippage, setSlippage] = useState<number>(1);
-	const [customSlippage, setCustomSlippage] = useState<string>('');
+	const [estimate, setEstimate] = useState<string>('0');
+	const [fee, setFee] = useState<Fee | null>();
 
 	function handleAmountChange(e: ChangeEvent<HTMLInputElement>) {
 		const value = e.currentTarget.value;
@@ -21,13 +37,58 @@ export function Swap() {
 		}
 	}
 
-	function handleCustomSlippageChange(e: ChangeEvent<HTMLInputElement>) {
-		const value = e.currentTarget.value;
-
-		if (regex.test(value)) {
-			setCustomSlippage(value);
+	const isFirstRender = useIsFirstRender();
+	useEffect(() => {
+		if (isFirstRender) {
+			return;
 		}
-	}
+
+		setError('');
+		setEstimate('0');
+		setFee(null);
+
+		if (!debouncedAmount) {
+			return;
+		}
+
+		const formattedAmount = new Decimal(debouncedAmount).times(1_000_000).toString();
+
+		const simulationQuery = {
+			simulation: {
+				offer_asset: {
+					amount: formattedAmount,
+					info: { native_token: { denom: 'uusd' } },
+				},
+			},
+		};
+
+		const swapMessage = computeSwapUstToOrneMessage(debouncedAmount, slippage.toString());
+
+		Promise.all([
+			lcd.wasm.contractQuery(contractAddress.pair, simulationQuery),
+			estimateFee([
+				new MsgExecuteContract(connectedWallet!.walletAddress, contractAddress.pair, swapMessage, [
+					new Coin('uusd', formattedAmount),
+				]),
+			]),
+		])
+			.then(([simulation, fee]) => {
+				setEstimate(simulation.return_amount);
+				setFee(fee);
+			})
+			.catch((e) => {
+				const errorCode = e.response.data?.code;
+
+				if (!errorCode) {
+					setError('Unknown error');
+					return;
+				}
+
+				if (errorCode === 3) {
+					setError('Please, increase your slippage');
+				}
+			});
+	}, [debouncedAmount, slippage]);
 
 	function swap(e: FormEvent) {
 		e.preventDefault();
@@ -35,7 +96,23 @@ export function Swap() {
 		if (!amount) {
 			return;
 		}
+
+		const swapMessage = computeSwapUstToOrneMessage(amount, slippage.toString());
+
+		const msg = new MsgExecuteContract(connectedWallet!.walletAddress, contractAddress.pair, swapMessage, [
+			new Coin('uusd', new Decimal(amount).times(1_000_000)),
+		]);
+
+		void connectedWallet!.post({
+			gasAdjustment: '1.6',
+			gasPrices: '0.456uusd',
+			feeDenoms: ['uusd'],
+			msgs: [msg],
+		});
 	}
+
+	const pricePerOrne = amount && estimate ? new Decimal(amount).times(1_000_000).dividedBy(estimate).toFixed(6) : '0';
+	const feePrice = fee?.amount?.get('uusd')?.amount.dividedBy(1_000_000).toFixed(6) || '0';
 
 	return (
 		<article>
@@ -48,7 +125,7 @@ export function Swap() {
 					<InputBlock>
 						<InputHeader>
 							<div>Balance</div>
-							<span className="balance">{data?.balance || 0}</span>
+							<span className="balance">{uUST || 0}</span>
 							<button className="outline-dark">Max</button>
 						</InputHeader>
 						<InputWrapper>
@@ -75,19 +152,19 @@ export function Swap() {
 							<tbody>
 								<tr>
 									<td>Price per $ORNE</td>
-									<InformationCell>0.03 UST</InformationCell>
+									<InformationCell>{pricePerOrne} UST</InformationCell>
 								</tr>
-								<tr>
-									<td>Price Impact</td>
-									<InformationCell>+0.30%</InformationCell>
-								</tr>
-								<tr>
-									<td>Minimum Received</td>
-									<InformationCell>50 $ORNE</InformationCell>
-								</tr>
+								{/*<tr>*/}
+								{/*	<td>Price Impact</td>*/}
+								{/*	<InformationCell>+0.30%</InformationCell>*/}
+								{/*</tr>*/}
+								{/*<tr>*/}
+								{/*	<td>Minimum Received</td>*/}
+								{/*	<InformationCell>50 $ORNE</InformationCell>*/}
+								{/*</tr>*/}
 								<tr>
 									<td>Tx Fee</td>
-									<InformationCell>0.25151 UST</InformationCell>
+									<InformationCell>{feePrice} UST</InformationCell>
 								</tr>
 							</tbody>
 						</table>
@@ -104,7 +181,7 @@ export function Swap() {
 							<span>Estimated</span>
 						</InputHeader>
 						<InputWrapper>
-							<PriceInput type="text" value="0" disabled />
+							<PriceInput type="text" value={new Decimal(estimate).dividedBy(1_000_000).toString()} disabled />
 							<TokenSymbol>
 								<TokenIcon>
 									<img src="/images/orne-logo.svg" alt="Orne logo" />
@@ -115,31 +192,22 @@ export function Swap() {
 					</InputBlock>
 
 					<MetaBlock style={{ gridColumn: 3 }}>
-						<SlippageControl>
-							<label htmlFor="slippage">Slippage</label>
-
-							<SlippageSelector>
-								<button onClick={() => setSlippage(0.5)}>0.5%</button>
-								<button onClick={() => setSlippage(1)}>1%</button>
-								<button onClick={() => setSlippage(4)}>4%</button>
-								<input
-									id="slippage"
-									name="slippage"
-									type="text"
-									autoComplete="off"
-									value={customSlippage}
-									onChange={handleCustomSlippageChange}
-								/>
-							</SlippageSelector>
-						</SlippageControl>
+						<Slippage slippage={slippage} onSlippageChange={(s) => setSlippage(s)} />
 
 						<SwapButton type="submit">Swap</SwapButton>
+
+						{error && <Error>{error}</Error>}
 					</MetaBlock>
 				</Content>
 			</SwapSection>
 		</article>
 	);
 }
+
+const Error = styled.span`
+	color: red;
+	font-size: 1rem;
+`;
 
 const SwapSection = styled.form`
 	display: grid;
@@ -228,52 +296,6 @@ const SwapIcon = styled.img`
 	:active {
 		transform: scale(0.9);
 	}
-`;
-
-const SlippageControl = styled.div`
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	padding-left: var(--space-3);
-	padding-right: var(--space-3);
-
-	label {
-		margin-right: var(--space-2);
-	}
-
-	button,
-	input[type='text'] {
-		width: 25%;
-		margin-right: 3px;
-		font-size: 1.2rem;
-		color: var(--text-color);
-		border-radius: var(--rounded);
-		border: 2px solid var(--text-color);
-		background-color: transparent;
-
-		:focus,
-		:hover {
-			color: white;
-			border-color: var(--darker-green);
-			background-color: var(--darker-green);
-		}
-	}
-
-	button {
-		padding-left: 0px;
-		padding-right: 0px;
-		overflow: hidden;
-	}
-
-	input[type='text'] {
-		margin-right: 0px;
-		padding: 0px var(--space-1);
-		text-align: center;
-	}
-`;
-
-const SlippageSelector = styled.div`
-	display: flex;
 `;
 
 const SwapButton = styled.button`
