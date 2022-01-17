@@ -1,4 +1,4 @@
-import { PageDescription, PageTitle, TokenIcon } from 'components/GlobalStyle';
+import { PageDescription, PageTitle, SectionHeader, TokenIcon } from 'components/GlobalStyle';
 import {
 	InputTokenWrapper,
 	InputToken,
@@ -9,6 +9,7 @@ import {
 	InputWrapper,
 	PriceInput,
 	TokenSymbol,
+	PairSymbol,
 } from 'components/ui/InputToken';
 import { useTerraNativeBalances } from 'hooks/useTerraNativeBalances';
 import styled from 'styled-components';
@@ -61,9 +62,9 @@ export function Earn() {
 			</div>
 
 			<StakeSection>
-				<StakeSectionHeader>
+				<SectionHeader>
 					Stake ORNE and UST <button className="outline-dark small">Max</button>
-				</StakeSectionHeader>
+				</SectionHeader>
 				<InputTokenWrapper>
 					<InputToken>
 						<InputTokenHeader>
@@ -125,6 +126,63 @@ export function Earn() {
 					</FormControls>
 				</StakeBottom>
 			</StakeSection>
+
+			<WithdrawSection>
+				<SectionHeader>
+					Withdraw ORNE / UST Liquidity <button className="outline-dark small">Max</button>
+				</SectionHeader>
+
+				<PairTokenWrapper>
+					<InputToken>
+						<InputTokenHeader>
+							<label htmlFor="lp-input">Balance</label>
+							<Balance>420,20</Balance>
+						</InputTokenHeader>
+						<InputWrapper>
+							<PriceInput id="lp-input" type="text" placeholder="0,0" />
+							<PairSymbol>
+								<TokenIcon>
+									<img src="/images/orne-logo.svg" alt="Orne logo" />
+								</TokenIcon>
+								<TokenIcon>
+									<img src="/icons/ust.svg" alt="UST logo" />
+								</TokenIcon>
+								ORNE/UST
+							</PairSymbol>
+						</InputWrapper>
+					</InputToken>
+					<InputTokenSeparator>
+						<InputTokenSeparatorIcon>
+							<img src="/icons/swapping.svg" alt="" />
+						</InputTokenSeparatorIcon>
+					</InputTokenSeparator>
+					<PairTokenDistribution>
+						<PairTokenValue>
+							1548,148
+							<TokenSymbol>
+								<TokenIcon>
+									<img src="/images/orne-logo.svg" alt="UST logo" />
+								</TokenIcon>
+								ORNE
+							</TokenSymbol>
+						</PairTokenValue>
+
+						<InputTokenSeparatorIcon>
+							<img src="/icons/plus.svg" alt="" />
+						</InputTokenSeparatorIcon>
+
+						<PairTokenValue>
+							7465.654
+							<TokenSymbol>
+								<TokenIcon>
+									<img src="/icons/ust.svg" alt="UST logo" />
+								</TokenIcon>
+								UST
+							</TokenSymbol>
+						</PairTokenValue>
+					</PairTokenDistribution>
+				</PairTokenWrapper>
+			</WithdrawSection>
 		</article>
 	);
 }
@@ -133,7 +191,7 @@ const Pool = styled.section`
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	padding: var(--space-2) var(--space-3);
+	padding: var(--space-3);
 	border-radius: var(--rounded);
 	background-color: var(--light-green);
 `;
@@ -188,17 +246,6 @@ const StakeSection = styled.form`
 	flex-wrap: wrap;
 `;
 
-const StakeSectionHeader = styled.div`
-	display: flex;
-	align-items: center;
-	margin-top: var(--space-5);
-	width: 100%;
-
-	button {
-		margin-left: var(--space-2);
-	}
-`;
-
 const StakeBottom = styled.div`
 	display: flex;
 	width: 100%;
@@ -234,5 +281,47 @@ const FormControls = styled.div`
 
 	button:last-child {
 		margin-left: var(--space-2);
+	}
+`;
+
+const WithdrawSection = styled.div`
+	display: flex;
+	flex-wrap: wrap;
+`;
+
+const PairTokenWrapper = styled.div`
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	margin-top: var(--space-3);
+	width: 100%;
+
+	${InputTokenSeparator} {
+		margin-top: var(--space-3);
+		margin-bottom: var(--space-3);
+	}
+`;
+
+const PairTokenDistribution = styled(InputToken)`
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: var(--space-3);
+
+	${InputTokenSeparatorIcon} {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translateX(-50%) translateY(-50%);
+	}
+`;
+
+const PairTokenValue = styled.div`
+	display: flex;
+	align-items: center;
+
+	${TokenSymbol} {
+		margin-left: var(--space-3);
 	}
 `;

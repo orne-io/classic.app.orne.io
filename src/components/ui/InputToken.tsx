@@ -1,8 +1,9 @@
+import { TokenIcon } from 'components/GlobalStyle';
 import styled from 'styled-components';
 
 export const InputTokenWrapper = styled.div`
 	display: flex;
-	margin-top: var(--space-2);
+	margin-top: var(--space-3);
 	margin-bottom: var(--space-3);
 	width: 100%;
 `;
@@ -27,6 +28,13 @@ export const InputTokenHeader = styled.div`
 
 export const TokenSymbol = styled.div`
 	display: flex;
+	align-items: center;
+`;
+
+export const PairSymbol = styled(TokenSymbol)`
+	${TokenIcon}:first-of-type {
+		margin-right: -6px;
+	}
 `;
 
 export const InputToken = styled.div`
@@ -65,7 +73,7 @@ export const InputTokenSeparator = styled.div`
 `;
 
 export const InputTokenSeparatorIcon = styled.div`
-	padding: 10px;
+	padding: 8px;
 	width: 42px;
 	height: 42px;
 	border-radius: 50%;

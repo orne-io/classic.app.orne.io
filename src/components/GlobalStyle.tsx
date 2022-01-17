@@ -174,6 +174,17 @@ export const PageDescription = styled.p`
 	margin-top: var(--space-3);
 `;
 
+export const SectionHeader = styled.div`
+	display: flex;
+	align-items: center;
+	margin-top: var(--space-5);
+	width: 100%;
+
+	button {
+		margin-left: var(--space-2);
+	}
+`;
+
 export const TokenIcon = styled.div`
 	margin-right: var(--space-2);
 	padding: 8px;
