@@ -49,6 +49,10 @@ export const GlobalStyle = createGlobalStyle`
 		overflow-wrap: break-word;
 	}
 
+	.mt-5 {
+		margin-top: var(--space-5);
+	}
+
 	article {
 		header {
 			margin-bottom: var(--space-6);
@@ -113,6 +117,12 @@ export const GlobalStyle = createGlobalStyle`
 			}
 		}
 
+		&.small {
+			padding-top: 0px;
+    	padding-bottom: 0px;
+    	font-size: 1rem;
+		}
+
 		&.outline-dark {
 			color: var(--dark-green);
 			border-color: var(--dark-green);
@@ -126,6 +136,26 @@ export const GlobalStyle = createGlobalStyle`
 
 		:hover {
 			background-color: var(--dark-green);
+		}
+	}
+
+	.buttons-group {
+		display: flex;
+		width: 100%;
+
+		button {
+			width: 100%;
+		}
+
+		button:first-child {
+			border-right-width: 0px;
+			border-top-right-radius: 0px;
+			border-bottom-right-radius: 0px;
+		}
+
+		button:last-child {
+			border-top-left-radius: 0px;
+			border-bottom-left-radius: 0px;
 		}
 	}
 	

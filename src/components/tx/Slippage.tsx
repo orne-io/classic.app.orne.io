@@ -23,13 +23,25 @@ export function Slippage({ slippage, onSlippageChange }: Props) {
 			<label htmlFor="slippage">Slippage</label>
 
 			<SlippageSelector>
-				<button onClick={() => handleSlippageChange(0.5)} data-active={(!isCustomAmount && slippage === 0.5) || null}>
+				<button
+					type="button"
+					onClick={() => handleSlippageChange(0.5)}
+					data-active={(!isCustomAmount && slippage === 0.5) || null}
+				>
 					0.5%
 				</button>
-				<button onClick={() => handleSlippageChange(1)} data-active={(!isCustomAmount && slippage === 1) || null}>
+				<button
+					type="button"
+					onClick={() => handleSlippageChange(1)}
+					data-active={(!isCustomAmount && slippage === 1) || null}
+				>
 					1%
 				</button>
-				<button onClick={() => handleSlippageChange(4)} data-active={(!isCustomAmount && slippage === 4) || null}>
+				<button
+					type="button"
+					onClick={() => handleSlippageChange(4)}
+					data-active={(!isCustomAmount && slippage === 4) || null}
+				>
 					4%
 				</button>
 				<input
@@ -50,8 +62,6 @@ const SlippageControl = styled.div`
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	padding-left: var(--space-3);
-	padding-right: var(--space-3);
 
 	label {
 		margin-right: var(--space-2);
@@ -77,7 +87,6 @@ const SlippageControl = styled.div`
 	}
 
 	button {
-		padding-inline: 0;
 		overflow: hidden;
 	}
 

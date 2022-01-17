@@ -1,18 +1,23 @@
 import {
 	Error,
-	Content,
 	InformationCell,
-	InputBlock,
-	InputHeader,
-	InputWrapper,
-	MetaBlock,
-	MiddlePart,
-	PriceInput,
 	SwapButton,
-	SwapIcon,
 	SwapSection,
-	TokenSymbol,
+	SwapBottom,
+	TxDetails,
+	FormControls,
+	Separator,
 } from './index';
+import {
+	InputToken,
+	InputTokenHeader,
+	InputTokenSeparator,
+	InputTokenSeparatorIcon,
+	InputTokenWrapper,
+	InputWrapper,
+	PriceInput,
+	TokenSymbol,
+} from 'components/ui/InputToken';
 import { TokenIcon } from '../GlobalStyle';
 import Decimal from 'decimal.js';
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
@@ -24,6 +29,8 @@ import { useIsFirstRender } from 'hooks/useIsFirstRender';
 import { Slippage } from 'components/tx/Slippage';
 import { useTerraNativeBalances } from 'hooks/useTerraNativeBalances';
 import { useSwapSimulation } from 'hooks/useSwapSimulation';
+
+import { Balance } from 'components/wallet/ButtonStyle';
 
 const regex = /^[0-9.]*$/;
 
@@ -94,13 +101,17 @@ export function SwapUst() {
 
 	return (
 		<SwapSection autoComplete="off" onSubmit={handleSubmit}>
-			<Content>
-				<InputBlock>
-					<InputHeader>
-						<div>Balance</div>
-						<span className="balance">{uUST || 0}</span>
-						<button className="outline-dark">Max</button>
-					</InputHeader>
+			<InputTokenWrapper>
+				<InputToken>
+					<InputTokenHeader>
+						<label htmlFor="amount" style={{ marginRight: 'auto' }}>
+							Balance
+						</label>
+						<Balance>{uUST || 0}</Balance>
+						<button type="button" className="outline-dark">
+							Max
+						</button>
+					</InputTokenHeader>
 					<InputWrapper>
 						<PriceInput
 							id="amount"
@@ -113,14 +124,37 @@ export function SwapUst() {
 						/>
 						<TokenSymbol>
 							<TokenIcon>
-								<img src="/icons/ust.svg" alt="Orne logo" />
+								<img src="/icons/ust.svg" alt="UST logo" />
 							</TokenIcon>
 							UST
 						</TokenSymbol>
 					</InputWrapper>
-				</InputBlock>
+				</InputToken>
 
-				<MetaBlock>
+				<InputTokenSeparator>
+					<InputTokenSeparatorIcon>
+						<img src="/icons/swapping.svg" alt="" />
+					</InputTokenSeparatorIcon>
+				</InputTokenSeparator>
+
+				<InputToken>
+					<InputTokenHeader>
+						<label style={{ marginRight: 'auto' }}>Estimated</label>
+					</InputTokenHeader>
+					<InputWrapper>
+						<PriceInput type="text" value={new Decimal(estimatedOrne).dividedBy(1_000_000).toString()} disabled />
+						<TokenSymbol>
+							<TokenIcon>
+								<img src="/images/orne-logo.svg" alt="Orne logo" />
+							</TokenIcon>
+							ORNE
+						</TokenSymbol>
+					</InputWrapper>
+				</InputToken>
+			</InputTokenWrapper>
+
+			<SwapBottom>
+				<TxDetails>
 					<table>
 						<tbody>
 							<tr>
@@ -141,37 +175,18 @@ export function SwapUst() {
 							</tr>
 						</tbody>
 					</table>
-				</MetaBlock>
-			</Content>
+				</TxDetails>
 
-			<MiddlePart>
-				<SwapIcon src="/icons/swapping.svg" alt="" />
-			</MiddlePart>
+				<Separator></Separator>
 
-			<Content>
-				<InputBlock>
-					<InputHeader>
-						<span>Estimated</span>
-					</InputHeader>
-					<InputWrapper>
-						<PriceInput type="text" value={new Decimal(estimatedOrne).dividedBy(1_000_000).toString()} disabled />
-						<TokenSymbol>
-							<TokenIcon>
-								<img src="/images/orne-logo.svg" alt="Orne logo" />
-							</TokenIcon>
-							ORNE
-						</TokenSymbol>
-					</InputWrapper>
-				</InputBlock>
-
-				<MetaBlock style={{ gridColumn: 3 }}>
+				<FormControls>
 					<Slippage slippage={slippage} onSlippageChange={(s) => setSlippage(s)} />
 
 					<SwapButton type="submit">Swap</SwapButton>
 
 					{error && <Error>{error}</Error>}
-				</MetaBlock>
-			</Content>
+				</FormControls>
+			</SwapBottom>
 		</SwapSection>
 	);
 }
