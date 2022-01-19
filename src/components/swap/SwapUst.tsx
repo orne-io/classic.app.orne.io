@@ -34,9 +34,9 @@ import { Balance } from 'components/wallet/ButtonStyle';
 
 const regex = /^[0-9.]*$/;
 
-export function SwapUst() {
+export function SwapUst({ onChangeDirection }) {
 	const [error, setError] = useState('');
-	const [amount, setAmount] = useState<string>('');
+	const [amount, setAmount] = useState<string | null>();
 	const [debouncedAmount] = useDebounce(amount, 200);
 	const [slippage, setSlippage] = useState<number>(1);
 	const [fee, setFee] = useState<Fee | null>();
@@ -91,6 +91,7 @@ export function SwapUst() {
 
 		swap({ amountUst: amount, slippage: slippage.toString() });
 	}
+
 	function handleAmountChange(e: ChangeEvent<HTMLInputElement>) {
 		const value = e.currentTarget.value;
 
@@ -117,14 +118,14 @@ export function SwapUst() {
 							id="amount"
 							name="amount"
 							type="text"
-							placeholder="0"
+							placeholder="0.00"
 							autoComplete="off"
-							value={amount}
+							value={amount || ''}
 							onChange={handleAmountChange}
 						/>
 						<TokenSymbol>
 							<TokenIcon>
-								<img src="/icons/ust.svg" alt="UST logo" />
+								<img src="/icons/ust.svg" alt="UST" />
 							</TokenIcon>
 							UST
 						</TokenSymbol>
@@ -132,7 +133,7 @@ export function SwapUst() {
 				</InputToken>
 
 				<InputTokenSeparator>
-					<InputTokenSeparatorIcon>
+					<InputTokenSeparatorIcon onClick={() => onChangeDirection()}>
 						<img src="/icons/swapping.svg" alt="" />
 					</InputTokenSeparatorIcon>
 				</InputTokenSeparator>
@@ -145,7 +146,7 @@ export function SwapUst() {
 						<PriceInput type="text" value={new Decimal(estimatedOrne).dividedBy(1_000_000).toString()} disabled />
 						<TokenSymbol>
 							<TokenIcon>
-								<img src="/images/orne-logo.svg" alt="Orne logo" />
+								<img src="/images/orne-logo.svg" alt="ORNE" />
 							</TokenIcon>
 							ORNE
 						</TokenSymbol>

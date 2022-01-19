@@ -60,6 +60,10 @@ export const PriceInput = styled.input`
 	border: 0;
 	background-color: transparent;
 
+	::placeholder {
+		opacity: 0.5;
+	}
+
 	:focus {
 		outline: none;
 	}
@@ -72,10 +76,14 @@ export const InputTokenSeparator = styled.div`
 	width: 25%;
 `;
 
-export const InputTokenSeparatorIcon = styled.div`
+export const InputTokenSeparatorIcon = styled.button`
 	padding: 8px;
 	width: 42px;
 	height: 42px;
 	border-radius: 50%;
 	background-color: white;
+
+	&:hover {
+		background-color: white !important;
+	}
 `;

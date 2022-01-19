@@ -1,5 +1,6 @@
 import { PageDescription, PageTitle } from 'components/GlobalStyle';
-import { SwapUst } from '../components/swap';
+import { SwapUst, SwapOrne } from '../components/swap';
+import { useState } from 'react';
 
 enum SwapDirection {
 	UstToOrne,
@@ -7,13 +8,20 @@ enum SwapDirection {
 }
 
 export function Swap() {
+	const [swapDirection, setSwapDirection] = useState<SwapDirection>(SwapDirection.UstToOrne);
+
 	return (
 		<article>
 			<header>
 				<PageTitle>Swap</PageTitle>
 				<PageDescription>Instantly trade $ORNE and UST</PageDescription>
 			</header>
-			<SwapUst />
+
+			{swapDirection === SwapDirection.UstToOrne ? (
+				<SwapUst onChangeDirection={() => setSwapDirection(SwapDirection.OrneToUst)} />
+			) : (
+				<SwapOrne onChangeDirection={() => setSwapDirection(SwapDirection.UstToOrne)} />
+			)}
 		</article>
 	);
 }
