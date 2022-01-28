@@ -126,6 +126,10 @@ const StakeSection = styled.form`
 const StakeBottom = styled.div`
 	display: flex;
 	width: 100%;
+
+	@media screen and (max-width: 768px) {
+		flex-direction: column-reverse;
+	}
 `;
 
 const Separator = styled.div`
@@ -146,6 +150,10 @@ const TxDetails = styled.div`
 				}
 			}
 		}
+	}
+
+	@media screen and (max-width: 768px) {
+		margin-top: var(--space-2);
 	}
 `;
 

@@ -27,6 +27,10 @@ export const InputBlock = styled.div`
 export const SwapBottom = styled.div`
 	display: flex;
 	width: 100%;
+
+	@media screen and (max-width: 768px) {
+		flex-direction: column-reverse;
+	}
 `;
 
 export const Separator = styled.div`
@@ -47,6 +51,10 @@ export const TxDetails = styled.div`
 				}
 			}
 		}
+	}
+
+	@media screen and (max-width: 768px) {
+		margin-top: var(--space-2);
 	}
 `;
 

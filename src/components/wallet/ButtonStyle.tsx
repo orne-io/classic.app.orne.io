@@ -13,6 +13,10 @@ export const Trigger = styled(DropdownMenu.Trigger)`
 export const Balance = styled.span`
 	display: inline-block;
 	margin-right: var(--space-3);
+
+	@media screen and (max-width: 768px) {
+		font-size: 1rem;
+	}
 `;
 
 export const WalletIcon = styled.img`
@@ -27,6 +31,16 @@ export const WalletAddress = styled.span`
 	display: inline-flex;
 	gap: var(--space-2);
 	padding: var(--space-1) var(--space-3);
+
+	@media screen and (max-width: 768px) {
+		font-size: 1rem;
+	}
+`;
+
+export const WalletAddressString = styled.span`
+	@media screen and (max-width: 768px) {
+		display: none;
+	}
 `;
 
 export const Content = styled(DropdownMenu.Content)`

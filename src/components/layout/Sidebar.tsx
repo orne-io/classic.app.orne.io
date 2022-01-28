@@ -25,6 +25,10 @@ export function Sidebar() {
 const SidebarWrapper = styled.aside`
 	margin-top: var(--space-4);
 	padding-inline: var(--space-4);
+
+	@media screen and (max-width: 768px) {
+		display: none;
+	}
 `;
 
 const Link = styled(ReactLink)`

@@ -1,5 +1,6 @@
 import { Header } from './Header';
 import { Footer } from './Footer';
+import { MobileMenu } from './MobileMenu';
 import { MaxWidthWrapper } from '../common/MaxWidthWrapper';
 import { Sidebar } from './Sidebar';
 import type { ReactNode } from 'react';
@@ -10,6 +11,7 @@ export function Shell({ children }: { children: ReactNode }) {
 		<ShellWrapper>
 			<Header />
 			<Sidebar />
+			<MobileMenu />
 
 			<Main as="main">{children}</Main>
 
@@ -21,6 +23,12 @@ export function Shell({ children }: { children: ReactNode }) {
 const Main = styled(MaxWidthWrapper)`
 	grid-area: main;
 	width: 100%;
+
+	@media screen and (max-width: 768px) {
+		grid-column-start: aside;
+		grid-column-end: main;
+		padding: var(--space-5) var(--space-3);
+	}
 `;
 
 const ShellWrapper = styled.div`

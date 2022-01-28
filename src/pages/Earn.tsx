@@ -20,15 +20,17 @@ export function Earn() {
 			</header>
 
 			<Pool>
-				<PoolIcons>
-					<TokenIcon>
-						<img src="/images/orne-logo.svg" />
-					</TokenIcon>
-					<TokenIcon>
-						<img src="/icons/ust.svg" />
-					</TokenIcon>
-				</PoolIcons>
-				<PoolSymbol>ORNE / UST</PoolSymbol>
+				<PoolColumn>
+					<PoolIcons>
+						<TokenIcon>
+							<img src="/images/orne-logo.svg" />
+						</TokenIcon>
+						<TokenIcon>
+							<img src="/icons/ust.svg" />
+						</TokenIcon>
+					</PoolIcons>
+					<PoolSymbol>ORNE / UST</PoolSymbol>
+				</PoolColumn>
 				<PoolColumn>
 					<label>APR</label>
 					<div>124,32%</div>
@@ -71,6 +73,10 @@ const Pool = styled.section`
 	padding: var(--space-3);
 	border-radius: var(--rounded);
 	background-color: var(--light-green);
+
+	@media screen and (max-width: 992px) {
+		flex-wrap: wrap;
+	}
 `;
 
 const PoolIcons = styled.div`
@@ -94,6 +100,30 @@ const PoolColumn = styled.div`
 	label {
 		font-size: 1rem;
 	}
+
+	@media screen and (max-width: 992px) {
+		margin-right: 0px;
+		width: 50%;
+
+		:last-of-type {
+			width: 100%;
+		}
+
+		:nth-child(3) {
+			margin-left: auto;
+			padding-right: var(--space-3);
+		}
+
+		:nth-child(4) {
+			width: 35%;
+		}
+	}
+
+	@media screen and (max-width: 768px) {
+		:nth-child(4) {
+			width: 50%;
+		}
+	}
 `;
 
 const PoolSymbol = styled.div`
@@ -115,5 +145,9 @@ const RewardsWrapper = styled.div`
 		padding-top: 0px;
 		padding-bottom: 0px;
 		font-size: 1rem;
+	}
+
+	@media screen and (max-width: 992px) {
+		justify-content: flex-end;
 	}
 `;

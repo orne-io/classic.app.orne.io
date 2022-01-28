@@ -94,6 +94,13 @@ const PairTokenWrapper = styled.div`
 		margin-top: var(--space-3);
 		margin-bottom: var(--space-3);
 	}
+
+	@media screen and (max-width: 768px) {
+		${InputTokenSeparator} {
+			margin-top: 0px;
+			margin-bottom: 0px;
+		}
+	}
 `;
 
 const PairTokenDistribution = styled(InputToken)`
@@ -108,6 +115,16 @@ const PairTokenDistribution = styled(InputToken)`
 		top: 50%;
 		left: 50%;
 		transform: translateX(-50%) translateY(-50%);
+	}
+
+	@media screen and (max-width: 768px) {
+		flex-direction: column;
+
+		${InputTokenSeparatorIcon} {
+			position: static;
+			margin: var(--space-3) 0px;
+			transform: translateX(0%) translateY(0%);
+		}
 	}
 `;
 

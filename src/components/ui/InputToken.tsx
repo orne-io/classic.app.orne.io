@@ -6,6 +6,10 @@ export const InputTokenWrapper = styled.div`
 	margin-top: var(--space-3);
 	margin-bottom: var(--space-3);
 	width: 100%;
+
+	@media screen and (max-width: 768px) {
+		flex-direction: column;
+	}
 `;
 
 export const InputTokenHeader = styled.div`
@@ -74,6 +78,11 @@ export const InputTokenSeparator = styled.div`
 	align-items: center;
 	justify-content: center;
 	width: 25%;
+
+	@media screen and (max-width: 768px) {
+		padding: var(--space-3) 0px;
+		width: 100%;
+	}
 `;
 
 export const InputTokenSeparatorIcon = styled.button`

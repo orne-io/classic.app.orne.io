@@ -27,4 +27,8 @@ const HeaderWrapper = styled.header`
 	display: flex;
 	justify-content: space-between;
 	padding: var(--space-5) var(--space-6);
+
+	@media screen and (max-width: 768px) {
+		padding: var(--space-5) var(--space-3);
+	}
 `;

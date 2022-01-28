@@ -95,6 +95,10 @@ const SlippageControl = styled.div`
 		padding: 0 var(--space-1);
 		text-align: center;
 	}
+
+	@media screen and (max-width: 768px) {
+		margin-top: var(--space-2);
+	}
 `;
 
 const SlippageSelector = styled.div`
