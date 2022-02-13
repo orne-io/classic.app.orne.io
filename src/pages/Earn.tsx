@@ -1,8 +1,8 @@
-import { PageDescription, PageTitle, TokenIcon } from 'components/GlobalStyle';
-import styled from 'styled-components';
 import { useState } from 'react';
 import { Provide } from 'components/earn/Provide';
-import { Withdraw } from '../components/earn/Withdraw';
+import { Withdraw } from 'components/earn/Withdraw';
+import { TokenPair, TokenIcon } from 'components/tokens';
+import { Box, Button, Flex, Grid, Heading, Paragraph, Text } from 'components/ui';
 
 enum EarnSection {
 	Provide,
@@ -13,141 +13,65 @@ export function Earn() {
 	const [sectionToDisplay, setSectionToDisplay] = useState<EarnSection>(EarnSection.Provide);
 
 	return (
-		<article>
-			<header>
-				<PageTitle>Earn</PageTitle>
-				<PageDescription>Stake your tokens to earn ORNE</PageDescription>
-			</header>
+		<Grid gap={2}>
+			<Grid as="header" gap={2}>
+				<Heading css={{ borderLeft: '5px solid $textColor', pl: '$3' }}>Earn</Heading>
+				<Paragraph>Stake your tokens to earn ORNE</Paragraph>
+			</Grid>
 
-			<Pool>
-				<PoolColumn>
-					<PoolIcons>
-						<TokenIcon>
-							<img src="/images/orne-logo.svg" />
-						</TokenIcon>
-						<TokenIcon>
-							<img src="/icons/ust.svg" />
-						</TokenIcon>
-					</PoolIcons>
-					<PoolSymbol>ORNE / UST</PoolSymbol>
-				</PoolColumn>
-				<PoolColumn>
-					<label>APR</label>
-					<div>124,32%</div>
-				</PoolColumn>
-				<PoolColumn>
-					<label>Liquidity</label>
-					<div>12,3m UST</div>
-				</PoolColumn>
-				<PoolColumn>
-					<label>Staked</label>
-					<div>1337,420 LP</div>
-				</PoolColumn>
-				<PoolColumn>
-					<label>Rewards</label>
-					<RewardsWrapper>
-						<span>10000,000 ORNE</span>
-						<button className="btn-claim outline-dark">Claim</button>
-					</RewardsWrapper>
-				</PoolColumn>
-			</Pool>
+			<Grid gap={4}>
+				<Flex
+					align="start"
+					justify="between"
+					gap={3}
+					css={{ backgroundColor: '$lightGreen', borderRadius: '$rounded', p: '$3' }}
+				>
+					<Flex alignSelf="center">
+						<TokenPair>
+							<TokenIcon>
+								<img src="/images/orne-logo.svg" alt="Orne" />
+							</TokenIcon>
+							<TokenIcon>
+								<img src="/icons/ust.svg" alt="UST" />
+							</TokenIcon>
+						</TokenPair>
 
-			<div className="buttons-group mt-5">
-				<button className="outline-dark" onClick={() => setSectionToDisplay(EarnSection.Provide)}>
-					Provide
-				</button>
-				<button className="outline-dark" onClick={() => setSectionToDisplay(EarnSection.Withdraw)}>
-					Withdraw
-				</button>
-			</div>
+						<Box css={{ mr: 'auto', whiteSpace: 'nowrap' }}>ORNE / UST</Box>
+					</Flex>
+
+					<Flex direction="column" align="end">
+						<Text size={1}>APR</Text>
+						<Text>124,32%</Text>
+					</Flex>
+
+					<Flex direction="column" align="end">
+						<Text size={1}>Liquidity</Text>
+						<Text>12,3m UST</Text>
+					</Flex>
+
+					<Flex direction="column" align="end">
+						<Text size={1}>Staked</Text>
+						<Text>1337,420 LP</Text>
+					</Flex>
+
+					<Flex direction="column" align="end">
+						<Text size={1}>Rewards</Text>
+						<Text>10000,000 ORNE</Text>
+						<Button size="small" outline="dark">
+							Claim
+						</Button>
+					</Flex>
+				</Flex>
+
+				<Flex justify="end" gap={2}>
+					<Button onClick={() => setSectionToDisplay(EarnSection.Provide)}>Provide</Button>
+					<Button outline="dark" onClick={() => setSectionToDisplay(EarnSection.Withdraw)}>
+						Withdraw
+					</Button>
+				</Flex>
+			</Grid>
 
 			{sectionToDisplay === EarnSection.Provide ? <Provide /> : <Withdraw />}
-		</article>
+		</Grid>
 	);
 }
-
-const Pool = styled.section`
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	padding: var(--space-3);
-	border-radius: var(--rounded);
-	background-color: var(--light-green);
-
-	@media screen and (max-width: 992px) {
-		flex-wrap: wrap;
-	}
-`;
-
-const PoolIcons = styled.div`
-	display: flex;
-
-	div:nth-child(2) {
-		margin-left: -15px;
-	}
-`;
-
-const PoolColumn = styled.div`
-	display: flex;
-	flex-direction: column;
-	margin-right: auto;
-	text-align: right;
-
-	:last-of-type {
-		margin-right: 0px;
-	}
-
-	label {
-		font-size: 1rem;
-	}
-
-	@media screen and (max-width: 992px) {
-		margin-right: 0px;
-		width: 50%;
-
-		:last-of-type {
-			width: 100%;
-		}
-
-		:nth-child(3) {
-			margin-left: auto;
-			padding-right: var(--space-3);
-		}
-
-		:nth-child(4) {
-			width: 35%;
-		}
-	}
-
-	@media screen and (max-width: 768px) {
-		:nth-child(4) {
-			width: 50%;
-		}
-	}
-`;
-
-const PoolSymbol = styled.div`
-	margin-right: auto;
-	white-space: nowrap;
-`;
-
-const RewardsWrapper = styled.div`
-	display: flex;
-	flex-wrap: wrap;
-	align-items: center;
-
-	span {
-		margin-right: var(--space-2);
-		white-space: nowrap;
-	}
-
-	.btn-claim {
-		padding-top: 0px;
-		padding-bottom: 0px;
-		font-size: 1rem;
-	}
-
-	@media screen and (max-width: 992px) {
-		justify-content: flex-end;
-	}
-`;

@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import styled from 'styled-components';
+import { styled } from 'stitches.config';
+import { Flex } from 'components/ui';
 
 type Props = {
 	slippage: number;
@@ -19,10 +20,10 @@ export function Slippage({ slippage, onSlippageChange }: Props) {
 	}
 
 	return (
-		<SlippageControl>
+		<SlippageControl align="center" justify="between">
 			<label htmlFor="slippage">Slippage</label>
 
-			<SlippageSelector>
+			<Flex gap={2}>
 				<button
 					type="button"
 					onClick={() => handleSlippageChange(0.5)}
@@ -53,54 +54,41 @@ export function Slippage({ slippage, onSlippageChange }: Props) {
 					onChange={(e) => handleSlippageChange(+e.target.value, true)}
 					data-active={isCustomAmount || null}
 				/>
-			</SlippageSelector>
+			</Flex>
 		</SlippageControl>
 	);
 }
 
-const SlippageControl = styled.div`
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
+const SlippageControl = styled(Flex, {
+	'marginTop': '$2',
 
-	label {
-		margin-right: var(--space-2);
-	}
+	'label': {
+		marginRight: '$2',
+	},
 
-	button,
-	input[type='text'] {
-		width: 25%;
-		margin-right: 3px;
-		font-size: 1.2rem;
-		color: var(--text-color);
-		border-radius: var(--rounded);
-		border: 2px solid var(--text-color);
-		background-color: transparent;
+	"button, input[type='text']": {
+		'width': '25%',
+		'marginRight': '3px',
+		'fontSize': '1.2rem',
+		'color': '$textColor',
+		'borderRadius': '$rounded',
+		'border': '2px solid $textColor',
+		'backgroundColor': 'transparent',
 
-		:focus,
-		:hover,
-		&[data-active='true'] {
-			color: white;
-			border-color: var(--darker-green);
-			background-color: var(--darker-green);
-		}
-	}
+		"&:focus, &:hover, &[data-active='true']": {
+			color: 'white',
+			borderColor: '$darkGreen',
+			backgroundColor: '$darkGreen',
+		},
+	},
 
-	button {
-		overflow: hidden;
-	}
+	'button': {
+		overflow: 'hidden',
+	},
 
-	input[type='text'] {
-		margin-right: 0;
-		padding: 0 var(--space-1);
-		text-align: center;
-	}
-
-	@media screen and (max-width: 768px) {
-		margin-top: var(--space-2);
-	}
-`;
-
-const SlippageSelector = styled.div`
-	display: flex;
-`;
+	"input[type='text']": {
+		marginRight: 0,
+		padding: '0 $1',
+		textAlign: 'center',
+	},
+});

@@ -1,7 +1,8 @@
-import styled from 'styled-components';
+import { styled } from 'stitches.config';
 
-export const MaxWidthWrapper = styled.div`
-	margin-inline: auto;
-	max-width: var(--container-width);
-	padding-inline: var(--space-5);
-`;
+export const MaxWidthWrapper = styled('div', {
+	marginInline: 'auto',
+	maxWidth: '$maxContainer',
+	paddingInline: '$5',
+	width: '100%',
+});

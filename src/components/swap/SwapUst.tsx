@@ -1,26 +1,5 @@
-import {
-	Error,
-	InformationCell,
-	SwapButton,
-	SwapSection,
-	SwapBottom,
-	TxDetails,
-	FormControls,
-	Separator,
-} from './index';
-import {
-	InputToken,
-	InputTokenHeader,
-	InputTokenSeparator,
-	InputTokenSeparatorIcon,
-	InputTokenWrapper,
-	InputWrapper,
-	PriceInput,
-	TokenSymbol,
-} from 'components/ui/InputToken';
-import { TokenIcon } from '../GlobalStyle';
 import Decimal from 'decimal.js';
-import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import { Fee } from '@terra-money/terra.js';
 import { useDebounce } from 'use-debounce';
 import { useSwap } from 'hooks/useSwap';
@@ -30,13 +9,13 @@ import { Slippage } from 'components/tx/Slippage';
 import { useTerraNativeBalances } from 'hooks/useTerraNativeBalances';
 import { useSwapSimulation } from 'hooks/useSwapSimulation';
 
-import { Balance } from 'components/wallet/ButtonStyle';
-
-const regex = /^[0-9.]*$/;
+import { AmountBox } from 'components/form';
+import { ActionSeparator } from 'components/common';
+import { Box, Button, Flex, Table, Text } from 'components/ui';
 
 export function SwapUst({ onChangeDirection }) {
 	const [error, setError] = useState('');
-	const [amount, setAmount] = useState<string | null>();
+	const [amount, setAmount] = useState<string>('');
 	const [debouncedAmount] = useDebounce(amount, 200);
 	const [slippage, setSlippage] = useState<number>(1);
 	const [fee, setFee] = useState<Fee | null>();
@@ -92,102 +71,44 @@ export function SwapUst({ onChangeDirection }) {
 		swap({ amountUst: amount, slippage: slippage.toString() });
 	}
 
-	function handleAmountChange(e: ChangeEvent<HTMLInputElement>) {
-		const value = e.currentTarget.value;
-
-		if (regex.test(value)) {
-			setAmount(value);
-		}
-	}
-
 	return (
-		<SwapSection autoComplete="off" onSubmit={handleSubmit}>
-			<InputTokenWrapper>
-				<InputToken>
-					<InputTokenHeader>
-						<label htmlFor="amount" style={{ marginRight: 'auto' }}>
-							Balance
-						</label>
-						<Balance>{uUST || 0}</Balance>
-						<button type="button" className="outline-dark">
-							Max
-						</button>
-					</InputTokenHeader>
-					<InputWrapper>
-						<PriceInput
-							id="amount"
-							name="amount"
-							type="text"
-							placeholder="0.00"
-							autoComplete="off"
-							value={amount || ''}
-							onChange={handleAmountChange}
-						/>
-						<TokenSymbol>
-							<TokenIcon>
-								<img src="/icons/ust.svg" alt="UST" />
-							</TokenIcon>
-							UST
-						</TokenSymbol>
-					</InputWrapper>
-				</InputToken>
+		<Flex as="form" direction="column" autoComplete="off" onSubmit={handleSubmit}>
+			<Flex justify="between" css={{ width: '100%' }}>
+				<AmountBox hasMax={true} denom="UST" balance={uUST} value={amount} onChange={setAmount} />
 
-				<InputTokenSeparator>
-					<InputTokenSeparatorIcon onClick={() => onChangeDirection()}>
+				<Flex align="center" justify="center" css={{ p: '$3', width: '25%' }}>
+					<ActionSeparator onClick={() => onChangeDirection()} css={{ cursor: 'pointer' }}>
 						<img src="/icons/swapping.svg" alt="" />
-					</InputTokenSeparatorIcon>
-				</InputTokenSeparator>
+					</ActionSeparator>
+				</Flex>
 
-				<InputToken>
-					<InputTokenHeader>
-						<label style={{ marginRight: 'auto' }}>Estimated</label>
-					</InputTokenHeader>
-					<InputWrapper>
-						<PriceInput type="text" value={new Decimal(estimatedOrne).dividedBy(1_000_000).toString()} disabled />
-						<TokenSymbol>
-							<TokenIcon>
-								<img src="/images/orne-logo.svg" alt="ORNE" />
-							</TokenIcon>
-							ORNE
-						</TokenSymbol>
-					</InputWrapper>
-				</InputToken>
-			</InputTokenWrapper>
+				<AmountBox label="Estimated" denom="ORNE" value={estimatedOrne} disabled />
+			</Flex>
 
-			<SwapBottom>
-				<TxDetails>
-					<table>
-						<tbody>
-							<tr>
-								<td>Price per $ORNE</td>
-								<InformationCell>{pricePerOrne} UST</InformationCell>
-							</tr>
-							{/*<tr>*/}
-							{/*	<td>Price Impact</td>*/}
-							{/*	<InformationCell>+0.30%</InformationCell>*/}
-							{/*</tr>*/}
-							{/*<tr>*/}
-							{/*	<td>Minimum Received</td>*/}
-							{/*	<InformationCell>50 $ORNE</InformationCell>*/}
-							{/*</tr>*/}
-							<tr>
-								<td>Tx Fee</td>
-								<InformationCell>{feePrice} UST</InformationCell>
-							</tr>
-						</tbody>
-					</table>
-				</TxDetails>
+			<Flex align="start">
+				<Table values>
+					<tbody>
+						<tr>
+							<td>Price per $ORNE</td>
+							<td>{pricePerOrne} UST</td>
+						</tr>
+						<tr>
+							<td>Tx Fee</td>
+							<td>{feePrice} UST</td>
+						</tr>
+					</tbody>
+				</Table>
 
-				<Separator></Separator>
+				<Box css={{ p: '$3', width: '25%' }} />
 
-				<FormControls>
+				<Flex gap={4} direction="column" css={{ px: '$3', width: '100%' }}>
 					<Slippage slippage={slippage} onSlippageChange={(s) => setSlippage(s)} />
 
-					<SwapButton type="submit">Swap</SwapButton>
+					<Button type="submit">Swap</Button>
 
-					{error && <Error>{error}</Error>}
-				</FormControls>
-			</SwapBottom>
-		</SwapSection>
+					{error && <Text color="red">{error}</Text>}
+				</Flex>
+			</Flex>
+		</Flex>
 	);
 }
