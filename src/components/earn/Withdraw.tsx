@@ -1,138 +1,58 @@
-import { SectionHeader, TokenIcon } from '../GlobalStyle';
-import {
-	Balance,
-	InputToken,
-	InputTokenHeader,
-	InputTokenSeparator,
-	InputTokenSeparatorIcon,
-	InputWrapper,
-	PairSymbol,
-	PriceInput,
-	TokenSymbol,
-} from '../ui/InputToken';
-import styled from 'styled-components';
-import { useTerraNativeBalances } from '../../hooks/useTerraNativeBalances';
-import { useWithdrawLiquidity } from '../../hooks/useWithdrawLiquidity';
+import { useTerraNativeBalances } from 'hooks/useTerraNativeBalances';
+import { useWithdrawLiquidity } from 'hooks/useWithdrawLiquidity';
+import { ActionSeparator } from 'components/common';
+import { AmountBox } from 'components/form';
+import { TokenIcon } from 'components/tokens';
+import { Button, Flex, Grid, Text } from 'components/ui';
 
 export function Withdraw() {
 	const { uUST } = useTerraNativeBalances();
 	const {} = useWithdrawLiquidity();
 
 	return (
-		<WithdrawSection>
-			<SectionHeader>
-				Withdraw ORNE / UST Liquidity <button className="outline-dark small">Max</button>
-			</SectionHeader>
+		<Grid gap={2}>
+			<Flex align="center" gap={2}>
+				<Text>Withdraw ORNE / UST Liquidity</Text>
+				<Button type="button" size="small" outline="dark">
+					Max
+				</Button>
+			</Flex>
 
-			<PairTokenWrapper>
-				<InputToken>
-					<InputTokenHeader>
-						<label htmlFor="lp-input">Balance</label>
-						<Balance>420,20</Balance>
-					</InputTokenHeader>
-					<InputWrapper>
-						<PriceInput id="lp-input" type="text" placeholder="0,0" />
-						<PairSymbol>
-							<TokenIcon>
-								<img src="/images/orne-logo.svg" alt="Orne logo" />
-							</TokenIcon>
-							<TokenIcon>
-								<img src="/icons/ust.svg" alt="UST logo" />
-							</TokenIcon>
-							ORNE/UST
-						</PairSymbol>
-					</InputWrapper>
-				</InputToken>
-				<InputTokenSeparator>
-					<InputTokenSeparatorIcon>
+			<Flex direction="column" gap={3}>
+				<AmountBox denom={'LP'} balance={'10'} value={'0'} onChange={() => {}} />
+
+				<Flex align="center" justify="center">
+					<ActionSeparator>
 						<img src="/icons/swapping.svg" alt="" />
-					</InputTokenSeparatorIcon>
-				</InputTokenSeparator>
-				<PairTokenDistribution>
-					<PairTokenValue>
-						1548,148
-						<TokenSymbol>
-							<TokenIcon>
-								<img src="/images/orne-logo.svg" alt="UST logo" />
-							</TokenIcon>
-							ORNE
-						</TokenSymbol>
-					</PairTokenValue>
+					</ActionSeparator>
+				</Flex>
 
-					<InputTokenSeparatorIcon>
+				<Flex
+					align="center"
+					justify="between"
+					css={{ backgroundColor: '$lightGreen', borderRadius: '$rounded', p: '$2 $3' }}
+				>
+					<Flex gap={2}>
+						<Text>1321</Text>
+						<TokenIcon>
+							<img src="/images/orne-logo.svg" alt="" />
+						</TokenIcon>
+						<Text>ORNE</Text>
+					</Flex>
+
+					<ActionSeparator>
 						<img src="/icons/plus.svg" alt="" />
-					</InputTokenSeparatorIcon>
+					</ActionSeparator>
 
-					<PairTokenValue>
-						7465.654
-						<TokenSymbol>
-							<TokenIcon>
-								<img src="/icons/ust.svg" alt="UST logo" />
-							</TokenIcon>
-							UST
-						</TokenSymbol>
-					</PairTokenValue>
-				</PairTokenDistribution>
-			</PairTokenWrapper>
-		</WithdrawSection>
+					<Flex gap={2}>
+						<Text>40</Text>
+						<TokenIcon>
+							<img src="/icons/ust.svg" alt="" />
+						</TokenIcon>
+						<Text>UST</Text>
+					</Flex>
+				</Flex>
+			</Flex>
+		</Grid>
 	);
 }
-
-const WithdrawSection = styled.div`
-	display: flex;
-	flex-wrap: wrap;
-`;
-
-const PairTokenWrapper = styled.div`
-	display: flex;
-	flex-wrap: wrap;
-	justify-content: center;
-	margin-top: var(--space-3);
-	width: 100%;
-
-	${InputTokenSeparator} {
-		margin-top: var(--space-3);
-		margin-bottom: var(--space-3);
-	}
-
-	@media screen and (max-width: 768px) {
-		${InputTokenSeparator} {
-			margin-top: 0px;
-			margin-bottom: 0px;
-		}
-	}
-`;
-
-const PairTokenDistribution = styled(InputToken)`
-	position: relative;
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	padding: var(--space-3);
-
-	${InputTokenSeparatorIcon} {
-		position: absolute;
-		top: 50%;
-		left: 50%;
-		transform: translateX(-50%) translateY(-50%);
-	}
-
-	@media screen and (max-width: 768px) {
-		flex-direction: column;
-
-		${InputTokenSeparatorIcon} {
-			position: static;
-			margin: var(--space-3) 0px;
-			transform: translateX(0%) translateY(0%);
-		}
-	}
-`;
-
-const PairTokenValue = styled.div`
-	display: flex;
-	align-items: center;
-
-	${TokenSymbol} {
-		margin-left: var(--space-3);
-	}
-`;

@@ -1,21 +1,9 @@
+import { useState } from 'react';
 import { useProvideLiquidity } from 'hooks/useProvideLiquidity';
-import { SectionHeader, TokenIcon } from '../GlobalStyle';
-import {
-	Balance,
-	InputToken,
-	InputTokenHeader,
-	InputTokenSeparator,
-	InputTokenSeparatorIcon,
-	InputTokenWrapper,
-	InputWrapper,
-	PriceInput,
-	TokenSymbol,
-} from '../ui/InputToken';
-import styled from 'styled-components';
-import { useTerraNativeBalances } from '../../hooks/useTerraNativeBalances';
-import { ChangeEvent, useState } from 'react';
-
-const regex = /^[0-9.]*$/;
+import { useTerraNativeBalances } from 'hooks/useTerraNativeBalances';
+import { ActionSeparator } from 'components/common';
+import { AmountBox } from 'components/form';
+import { Box, Button, Flex, Grid, Table, Text } from 'components/ui';
 
 export function Provide() {
 	const { uUST } = useTerraNativeBalances();
@@ -26,145 +14,60 @@ export function Provide() {
 
 	function handleSubmit(e) {
 		e.preventDefault();
-		console.log({ amountUst, amountOrne });
 
 		if (!amountOrne || !amountUst) return;
 
 		provide({ amountUst, amountOrne });
 	}
 
-	function handleAmountUstChange(e: ChangeEvent<HTMLInputElement>) {
-		const value = e.currentTarget.value;
-
-		if (regex.test(value)) {
-			setAmountUst(value);
-		}
-	}
-
-	function handleAmountOrneChange(e: ChangeEvent<HTMLInputElement>) {
-		const value = e.currentTarget.value;
-
-		if (regex.test(value)) {
-			setAmountOrne(value);
-		}
-	}
-
 	return (
-		<StakeSection onSubmit={handleSubmit}>
-			<SectionHeader>
-				Stake ORNE and UST <button className="outline-dark small">Max</button>
-			</SectionHeader>
-			<InputTokenWrapper>
-				<InputToken>
-					<InputTokenHeader>
-						<label htmlFor="orne-input">Balance</label>
-						<Balance>420,20</Balance>
-					</InputTokenHeader>
-					<InputWrapper>
-						<PriceInput id="orne-input" type="text" placeholder="0,0" onChange={handleAmountOrneChange} />
-						<TokenSymbol>
-							<TokenIcon>
-								<img src="/images/orne-logo.svg" alt="Orne logo" />
-							</TokenIcon>
-							ORNE
-						</TokenSymbol>
-					</InputWrapper>
-				</InputToken>
-				<InputTokenSeparator>
-					<InputTokenSeparatorIcon>
+		<Grid as="form" gap={2} onSubmit={handleSubmit}>
+			<Flex align="center" gap={2}>
+				<Text>Stake ORNE and UST</Text>
+				<Button type="button" size="small" outline="dark">
+					Max
+				</Button>
+			</Flex>
+
+			<Flex justify="between" css={{ width: '100%' }}>
+				<AmountBox denom="ORNE" balance={'420'} value={amountOrne} onChange={setAmountOrne} />
+
+				<Flex align="center" justify="center" css={{ p: '$3', width: '25%' }}>
+					<ActionSeparator>
 						<img src="/icons/plus.svg" alt="" />
-					</InputTokenSeparatorIcon>
-				</InputTokenSeparator>
-				<InputToken>
-					<InputTokenHeader>
-						<label htmlFor="ust-input">Balance</label>
-						<Balance>{(uUST / 1_000_000).toFixed(2)}</Balance>
-					</InputTokenHeader>
-					<InputWrapper>
-						<PriceInput id="ust-input" type="text" placeholder="0,0" onChange={handleAmountUstChange} />
-						<TokenSymbol>
-							<TokenIcon>
-								<img src="/icons/ust.svg" alt="UST logo" />
-							</TokenIcon>
-							UST
-						</TokenSymbol>
-					</InputWrapper>
-				</InputToken>
-			</InputTokenWrapper>
-			<StakeBottom>
-				<TxDetails>
-					<table>
-						<tr>
-							<td>Orne Price</td>
-							<td>0.032342 UST</td>
-						</tr>
-						<tr>
-							<td>LP from TX</td>
-							<td>0,0 LP</td>
-						</tr>
-						<tr>
-							<td>Pool Share after TX</td>
-							<td>0,01%</td>
-						</tr>
-					</table>
-				</TxDetails>
-				<Separator />
-				<FormControls>
-					<button type="submit">Stake Tokens</button>
-					<button className="outline">Cancel</button>
-				</FormControls>
-			</StakeBottom>
-		</StakeSection>
+					</ActionSeparator>
+				</Flex>
+
+				<AmountBox denom="UST" balance={uUST} value={amountUst} onChange={setAmountUst} />
+			</Flex>
+
+			<Flex justify="between">
+				<Box>
+					<Table values>
+						<tbody>
+							<tr>
+								<td>Orne Price</td>
+								<td>0.032342 UST</td>
+							</tr>
+							<tr>
+								<td>LP from TX</td>
+								<td>0,0 LP</td>
+							</tr>
+							<tr>
+								<td>Pool Share after TX</td>
+								<td>0,01%</td>
+							</tr>
+						</tbody>
+					</Table>
+				</Box>
+
+				<Flex align="start" justify="end" gap={2}>
+					<Button type="submit">Stake Tokens</Button>
+					<Button type="button" outline>
+						Cancel
+					</Button>
+				</Flex>
+			</Flex>
+		</Grid>
 	);
 }
-
-const StakeSection = styled.form`
-	display: flex;
-	flex-wrap: wrap;
-`;
-
-const StakeBottom = styled.div`
-	display: flex;
-	width: 100%;
-
-	@media screen and (max-width: 768px) {
-		flex-direction: column-reverse;
-	}
-`;
-
-const Separator = styled.div`
-	width: 25%;
-`;
-
-const TxDetails = styled.div`
-	padding: 0px var(--space-3);
-	width: 100%;
-
-	table {
-		width: 100%;
-
-		tr {
-			td {
-				&:last-of-type {
-					text-align: right;
-				}
-			}
-		}
-	}
-
-	@media screen and (max-width: 768px) {
-		margin-top: var(--space-2);
-	}
-`;
-
-const FormControls = styled.div`
-	display: flex;
-	align-items: flex-start;
-	justify-content: flex-end;
-	padding: 0px var(--space-3);
-	width: 100%;
-
-	button:last-child {
-		margin-left: var(--space-2);
-	}
-`;
