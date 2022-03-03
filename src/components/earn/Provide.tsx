@@ -1,6 +1,9 @@
+import Decimal from 'decimal.js';
 import { useState } from 'react';
+import { readAmount, toAmount } from '@terra.kitchen/utils';
 import { useProvideLiquidity } from 'hooks/useProvideLiquidity';
 import { useTerraNativeBalances } from 'hooks/useTerraNativeBalances';
+import { useSwapSimulation } from 'hooks/useSwapSimulation';
 import { ActionSeparator } from 'components/common';
 import { AmountBox } from 'components/form';
 import { Box, Button, Flex, Grid, Table, Text } from 'components/ui';
@@ -8,9 +11,32 @@ import { Box, Button, Flex, Grid, Table, Text } from 'components/ui';
 export function Provide() {
 	const { uUST } = useTerraNativeBalances();
 	const { provide } = useProvideLiquidity();
+	const { simulate } = useSwapSimulation();
 
 	const [amountOrne, setAmountOrne] = useState<string | null>('');
 	const [amountUst, setAmountUst] = useState<string | null>('');
+
+	async function handleUstAmountChange(amount: string) {
+		setAmountUst(amount);
+
+		const estimatedReturn = await simulate({ amountUst: amount }).then(
+			({ return_amount, spread_amount, commission_amount }) =>
+				new Decimal(return_amount).plus(spread_amount).plus(commission_amount)
+		);
+
+		setAmountOrne(readAmount(estimatedReturn));
+	}
+
+	async function handleOrneAmountChange(amount: string) {
+		setAmountOrne(amount);
+
+		const estimatedReturn = await simulate({ amountOrne: amount }).then(
+			({ return_amount, spread_amount, commission_amount }) =>
+				new Decimal(return_amount).plus(spread_amount).plus(commission_amount)
+		);
+
+		setAmountUst(readAmount(estimatedReturn));
+	}
 
 	function handleSubmit(e) {
 		e.preventDefault();
@@ -30,7 +56,7 @@ export function Provide() {
 			</Flex>
 
 			<Flex justify="between" css={{ width: '100%' }}>
-				<AmountBox denom="ORNE" balance={'420'} value={amountOrne} onChange={setAmountOrne} />
+				<AmountBox denom="ORNE" balance={'420'} value={amountOrne} onChange={handleOrneAmountChange} />
 
 				<Flex align="center" justify="center" css={{ p: '$3', width: '25%' }}>
 					<ActionSeparator>
@@ -38,7 +64,7 @@ export function Provide() {
 					</ActionSeparator>
 				</Flex>
 
-				<AmountBox denom="UST" balance={uUST} value={amountUst} onChange={setAmountUst} />
+				<AmountBox denom="UST" balance={uUST} value={amountUst} onChange={handleUstAmountChange} />
 			</Flex>
 
 			<Flex justify="between">
@@ -61,11 +87,8 @@ export function Provide() {
 					</Table>
 				</Box>
 
-				<Flex align="start" justify="end" gap={2}>
+				<Flex align="start" justify="end">
 					<Button type="submit">Stake Tokens</Button>
-					<Button type="button" outline>
-						Cancel
-					</Button>
 				</Flex>
 			</Flex>
 		</Grid>

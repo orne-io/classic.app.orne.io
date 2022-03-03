@@ -20,7 +20,7 @@ export function AmountBox({ label, balance, denom, value, onChange, hasMax, disa
 
 	function setMaximumAmount() {
 		if (onChange) {
-			onChange(balance);
+			onChange(readAmount(balance));
 		}
 	}
 

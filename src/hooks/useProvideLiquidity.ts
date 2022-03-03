@@ -41,7 +41,8 @@ export function useProvideLiquidity() {
 						},
 					},
 				],
-				slippage_tolerance: '0.01',
+				auto_stake: false,
+				slippage_tolerance: '0.02',
 			},
 		};
 
