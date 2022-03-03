@@ -7,6 +7,10 @@ export function useTerraNativeBalances() {
 	const { queryClient } = useApp();
 	const connectedWallet = useConnectedWallet();
 
+	if (!connectedWallet) {
+		return { data: EMPTY_NATIVE_BALANCES };
+	}
+
 	const { data = EMPTY_NATIVE_BALANCES } = useTerraNativeBalancesQuery(connectedWallet!.walletAddress, queryClient);
 
 	return data;
