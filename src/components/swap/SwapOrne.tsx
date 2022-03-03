@@ -11,6 +11,7 @@ import { useSwapSimulation } from 'hooks/useSwapSimulation';
 import { Box, Button, Flex, Table, Text } from 'components/ui';
 import { AmountBox } from 'components/form';
 import { ActionSeparator } from 'components/common';
+import { readAmount } from '@terra.kitchen/utils';
 
 export function SwapOrne({ onChangeDirection }) {
 	const [error, setError] = useState('');
@@ -81,7 +82,7 @@ export function SwapOrne({ onChangeDirection }) {
 					</ActionSeparator>
 				</Flex>
 
-				<AmountBox label="Estimated" denom="UST" value={estimatedUst} disabled />
+				<AmountBox label="Estimated" denom="UST" value={readAmount(estimatedUst)} disabled />
 			</Flex>
 
 			<Flex align="start">
