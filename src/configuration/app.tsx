@@ -3,6 +3,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { WalletProvider } from '@terra-money/wallet-provider';
 import { globalStyles } from 'components/GlobalStyle';
 import { OrneProvider } from 'context/OrneProvider';
+import { TxResolverProvider } from 'context/TxResolverProvider';
 import type { ReactNode } from 'react';
 import type { WalletControllerChainOptions } from '@terra-money/wallet-provider';
 
@@ -21,7 +22,9 @@ export function AppProviders({ children, walletConnectChainIds, defaultNetwork }
 		<WalletProvider defaultNetwork={walletConnectChainIds[0]} walletConnectChainIds={walletConnectChainIds}>
 			<BrowserRouter>
 				<QueryClientProvider client={queryClient}>
-					<OrneProvider>{children}</OrneProvider>
+					<OrneProvider>
+						<TxResolverProvider>{children}</TxResolverProvider>
+					</OrneProvider>
 				</QueryClientProvider>
 			</BrowserRouter>
 		</WalletProvider>

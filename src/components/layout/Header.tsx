@@ -1,8 +1,10 @@
+import { Oval } from 'react-loader-spinner';
 import { useWallet, WalletStatus } from '@terra-money/wallet-provider';
 import { styled } from 'stitches.config';
 import { ConnectWalletButton } from 'components/wallet/ConnectWalletButton';
 import { WalletButton } from '../wallet/WalletButton';
-import { Flex } from '../ui';
+import { Flex, Text } from 'components/ui';
+import { usePendingTransaction } from 'hooks/usePendingTransaction';
 
 const Logo = styled('img', {
 	height: '50px',
@@ -11,6 +13,7 @@ const Logo = styled('img', {
 
 export function Header() {
 	const { status } = useWallet();
+	const { pendingTransactions } = usePendingTransaction();
 
 	return (
 		<Flex
@@ -20,10 +23,23 @@ export function Header() {
 		>
 			<Logo src="/images/orne-logo.svg" alt="Orne.io" />
 
-			<div>
+			<Flex>
+				{pendingTransactions.length > 0 && (
+					<Flex gap={5} align="center" css={{ backgroundColor: '$lightGreen', borderRadius: '50px', px: '$4' }}>
+						<Oval
+							ariaLabel="loading-indicator"
+							height={25}
+							width={25}
+							strokeWidth={5}
+							color="hsl(203,23%,42%)"
+							secondaryColor="hsl(173,29%,76%)"
+						/>
+						<Text size={1}>{pendingTransactions.length} Pending Transaction...</Text>
+					</Flex>
+				)}
 				{status === WalletStatus.WALLET_NOT_CONNECTED && <ConnectWalletButton />}
 				{status === WalletStatus.WALLET_CONNECTED && <WalletButton />}
-			</div>
+			</Flex>
 		</Flex>
 	);
 }

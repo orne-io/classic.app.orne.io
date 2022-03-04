@@ -3,6 +3,8 @@ import { useMutation } from 'react-query';
 import { Coin, MsgExecuteContract } from '@terra-money/terra.js';
 import { useConnectedWallet } from '@terra-money/wallet-provider';
 import { useApp } from 'hooks/useApp';
+import { usePendingTransaction } from './usePendingTransaction';
+import { toAmount } from '@terra.kitchen/utils';
 
 type ProvideLiquidityParams = {
 	amountUst: string;
@@ -12,6 +14,7 @@ type ProvideLiquidityParams = {
 export function useProvideLiquidity() {
 	const connectedWallet = useConnectedWallet();
 	const { contractAddress } = useApp();
+	const { pushTransaction } = usePendingTransaction();
 
 	const { mutate, status } = useMutation(async (params: ProvideLiquidityParams) => {
 		const increaseAllowanceQuery = {
@@ -59,12 +62,20 @@ export function useProvideLiquidity() {
 			[new Coin('uusd', new Decimal(params.amountUst).times(1_000_000))]
 		);
 
-		return connectedWallet!.post({
+		const tx = await connectedWallet!.post({
 			gasAdjustment: '1.6',
 			gasPrices: '0.456uusd',
 			feeDenoms: ['uusd'],
 			msgs: [increaseAllowanceMsg, provideLiquidityMsg],
 		});
+
+		pushTransaction(
+			tx,
+			`Provided ${toAmount(params.amountOrne, { decimals: 0, comma: true })} $ORNE & ${toAmount(params.amountUst, {
+				decimals: 0,
+				comma: true,
+			})} UST for liquidity.`
+		);
 	});
 
 	return {
