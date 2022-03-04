@@ -14,18 +14,24 @@ export function useLpReward() {
 	const connectedWallet = useConnectedWallet();
 	const { contractAddress } = useApp();
 
-	return useQuery([ORNE_QUERY_KEY.ORNE_REWARD], () => {
-		if (!connectedWallet) {
-			return;
+	return useQuery(
+		[ORNE_QUERY_KEY.ORNE_REWARD],
+		() => {
+			if (!connectedWallet) {
+				return;
+			}
+
+			const msg = {
+				pending_token: {
+					lp_token: contractAddress.lp,
+					user: connectedWallet.walletAddress,
+				},
+			};
+
+			return lcd.wasm.contractQuery<PendingTokenQueryResult>(contractAddress.astroGenerator, msg);
+		},
+		{
+			refetchInterval: 30 * 1000, // 30s
 		}
-
-		const msg = {
-			pending_token: {
-				lp_token: contractAddress.lp,
-				user: connectedWallet.walletAddress,
-			},
-		};
-
-		return lcd.wasm.contractQuery<PendingTokenQueryResult>(contractAddress.astroGenerator, msg);
-	});
+	);
 }
