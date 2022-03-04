@@ -67,29 +67,8 @@ export function Provide() {
 				<AmountBox denom="UST" balance={uUST} value={amountUst} onChange={handleUstAmountChange} />
 			</Flex>
 
-			<Flex justify="between">
-				<Box>
-					<Table values>
-						<tbody>
-							<tr>
-								<td>Orne Price</td>
-								<td>0.032342 UST</td>
-							</tr>
-							<tr>
-								<td>LP from TX</td>
-								<td>0,0 LP</td>
-							</tr>
-							<tr>
-								<td>Pool Share after TX</td>
-								<td>0,01%</td>
-							</tr>
-						</tbody>
-					</Table>
-				</Box>
-
-				<Flex align="start" justify="end">
-					<Button type="submit">Stake Tokens</Button>
-				</Flex>
+			<Flex align="start" justify="end">
+				<Button type="submit">Stake Tokens</Button>
 			</Flex>
 		</Grid>
 	);

@@ -23,7 +23,7 @@ export function Header() {
 		>
 			<Logo src="/images/orne-logo.svg" alt="Orne.io" />
 
-			<Flex>
+			<Flex gap={4}>
 				{pendingTransactions.length > 0 && (
 					<Flex gap={5} align="center" css={{ backgroundColor: '$lightGreen', borderRadius: '50px', px: '$4' }}>
 						<Oval

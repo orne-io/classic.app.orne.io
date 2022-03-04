@@ -7,6 +7,7 @@ import { useLpReward } from '../hooks/useLpReward';
 import { readAmount } from '@terra.kitchen/utils';
 import { useClaimReward } from '../hooks/useClaimReward';
 import { useLpBalance } from '../hooks/useLpBalance';
+import { ThreeDots } from 'react-loader-spinner';
 
 enum EarnSection {
 	Provide,
@@ -63,7 +64,9 @@ export function Earn() {
 					<Flex direction="column" align="end">
 						<Text size={1}>Staked</Text>
 						{isLoadingLpBalance ? (
-							<Text size={0}>Loading...</Text>
+							<Box css={{ mt: '$2' }}>
+								<ThreeDots color="hsl(203,23%,42%)" height="10" />
+							</Box>
 						) : (
 							<Text>~ {readAmount(lpBalance, { comma: true, fixed: 0 })} LP</Text>
 						)}
@@ -72,7 +75,9 @@ export function Earn() {
 					<Flex direction="column" align="end">
 						<Text size={1}>Rewards</Text>
 						{isLoadingReward ? (
-							<Text size={0}>Loading...</Text>
+							<Box css={{ mt: '$2' }}>
+								<ThreeDots color="hsl(203,23%,42%)" height="10" />
+							</Box>
 						) : (
 							<Flex gap={2} align="center">
 								<Text>{readAmount(reward.pending_on_proxy)} ORNE</Text>
@@ -81,7 +86,7 @@ export function Earn() {
 								</Text>
 							</Flex>
 						)}
-						<Button size="small" outline="dark" onClick={handleClaimReward}>
+						<Button css={{ mt: '$2' }} size="small" outline="dark" onClick={handleClaimReward}>
 							Claim
 						</Button>
 					</Flex>

@@ -2,6 +2,7 @@ import { readAmount } from '@terra.kitchen/utils';
 import { TokenIcon, TokenPair } from 'components/tokens';
 import { Box, Button, Flex, Text } from 'components/ui';
 import { AmountInput } from './AmountInput';
+import { ThreeDots } from 'react-loader-spinner';
 
 type Props = {
 	label?: string;
@@ -10,15 +11,27 @@ type Props = {
 	value: string | null;
 	onChange?: Function;
 	loading?: boolean;
+	loadingBalance?: boolean;
 	hasMax?: boolean;
 	disabled?: boolean;
 };
 
-export function AmountBox({ label, balance, denom, value, onChange, hasMax, disabled, loading }: Props) {
+export function AmountBox({
+	label,
+	balance,
+	denom,
+	value,
+	onChange,
+	hasMax,
+	disabled,
+	loading,
+	loadingBalance,
+}: Props) {
 	label = label ?? 'Balance';
 	hasMax = hasMax || false;
 	disabled = disabled || false;
 	loading = loading ?? false;
+	loadingBalance = loadingBalance ?? false;
 
 	function setMaximumAmount() {
 		if (onChange) {
@@ -36,7 +49,13 @@ export function AmountBox({ label, balance, denom, value, onChange, hasMax, disa
 				<Text>{label}</Text>
 				{balance && (
 					<Flex gap={2}>
-						<Text>{readAmount(balance, { comma: true })}</Text>
+						{loadingBalance ? (
+							<Flex align="center">
+								<ThreeDots color="hsl(203,23%,42%)" height="10" />
+							</Flex>
+						) : (
+							<Text>{readAmount(balance, { comma: true })}</Text>
+						)}
 						{hasMax && (
 							<Button type="button" size="small" outline onClick={setMaximumAmount}>
 								Max

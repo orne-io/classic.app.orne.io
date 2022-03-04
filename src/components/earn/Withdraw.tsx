@@ -1,3 +1,4 @@
+import { useDebounce } from 'use-debounce';
 import { useLpBalance } from 'hooks/useLpBalance';
 import { useWithdrawLiquidity } from 'hooks/useWithdrawLiquidity';
 import { ActionSeparator } from 'components/common';
@@ -7,13 +8,15 @@ import { Button, Flex, Grid, Text } from 'components/ui';
 import { useState } from 'react';
 import { useShare } from '../../hooks/useShare';
 import { readAmount, toAmount } from '@terra.kitchen/utils';
+import { ThreeDots } from 'react-loader-spinner';
 
 export function Withdraw() {
-	const { data: balance } = useLpBalance();
+	const { data: balance, isLoadingLpBalance } = useLpBalance();
 	const { withdraw } = useWithdrawLiquidity();
 	const [amount, setAmount] = useState('');
+	const [debouncedAmount] = useDebounce(amount, 300);
 
-	const { data: withdrawing } = useShare(toAmount(amount));
+	const { data: withdrawing, isLoading } = useShare(toAmount(debouncedAmount));
 
 	function handleSubmit() {
 		withdraw({ amount });
@@ -25,7 +28,14 @@ export function Withdraw() {
 				<Text>Withdraw ORNE / UST Liquidity</Text>
 			</Flex>
 			<Flex direction="column" gap={3}>
-				<AmountBox hasMax={true} denom={'LP'} balance={balance || '0'} value={amount} onChange={setAmount} />
+				<AmountBox
+					hasMax={true}
+					denom={'LP'}
+					balance={balance || '0'}
+					loadingBalance={isLoadingLpBalance}
+					value={amount}
+					onChange={setAmount}
+				/>
 				<Flex align="center" justify="center">
 					<ActionSeparator>
 						<img src="/icons/swapping.svg" alt="" />
@@ -37,7 +47,13 @@ export function Withdraw() {
 					css={{ backgroundColor: '$lightGreen', borderRadius: '$rounded', p: '$2 $3' }}
 				>
 					<Flex gap={2}>
-						<Text>{withdrawing && readAmount(withdrawing.amountOrne, { comma: true })}</Text>
+						{isLoading ? (
+							<Flex align="center">
+								<ThreeDots color="hsl(203,23%,42%)" height="10" />
+							</Flex>
+						) : (
+							<Text>{withdrawing && readAmount(withdrawing.amountOrne, { comma: true })}</Text>
+						)}
 						<TokenIcon>
 							<img src="/images/orne-logo.svg" alt="" />
 						</TokenIcon>
@@ -47,7 +63,14 @@ export function Withdraw() {
 						<img src="/icons/plus.svg" alt="" />
 					</ActionSeparator>
 					<Flex gap={2}>
-						<Text>{withdrawing && readAmount(withdrawing.amountUst, { comma: true })}</Text>
+						{isLoading ? (
+							<Flex align="center">
+								<ThreeDots color="hsl(203,23%,42%)" height="10" />
+							</Flex>
+						) : (
+							<Text>{withdrawing && readAmount(withdrawing.amountUst, { comma: true })}</Text>
+						)}
+
 						<TokenIcon>
 							<img src="/icons/ust.svg" alt="" />
 						</TokenIcon>
