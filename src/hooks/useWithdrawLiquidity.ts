@@ -1,8 +1,9 @@
 import Decimal from 'decimal.js';
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import { toAmount } from '@terra.kitchen/utils';
 import { useConnectedWallet } from '@terra-money/wallet-provider';
 import { MsgExecuteContract } from '@terra-money/terra.js';
+import { ORNE_QUERY_KEY, TERRA_QUERY_KEY } from 'client/cacheKeys';
 import { useApp } from 'hooks/useApp';
 import { usePendingTransaction } from 'hooks/usePendingTransaction';
 
@@ -11,6 +12,7 @@ type WithdrawLiquidityParams = {
 };
 
 export function useWithdrawLiquidity() {
+	const queryClient = useQueryClient();
 	const connectedWallet = useConnectedWallet();
 	const { pushTransaction } = usePendingTransaction();
 	const { contractAddress } = useApp();
@@ -38,7 +40,15 @@ export function useWithdrawLiquidity() {
 			msgs: [unstakeMsg, withdrawMsg],
 		});
 
-		pushTransaction(tx, `Withdrew ${toAmount(params.amount, { decimals: 0, comma: true })} LP`);
+		pushTransaction({
+			tx,
+			customToastMessage: `Withdrew ${toAmount(params.amount, { decimals: 0, comma: true })} LP`,
+			callback: () => {
+				void queryClient.invalidateQueries(TERRA_QUERY_KEY.TERRA_NATIVE_BALANCES);
+				void queryClient.invalidateQueries(ORNE_QUERY_KEY.ORNE_BALANCE);
+				void queryClient.invalidateQueries(ORNE_QUERY_KEY.ORNE_LP);
+			},
+		});
 	});
 
 	return {

@@ -6,9 +6,15 @@ import { useConnectedWallet, useLCDClient } from '@terra-money/wallet-provider';
 import { toast } from 'react-hot-toast';
 import { Text } from '../components/ui';
 
+type PendingTransaction = {
+	tx: TxResult;
+	customToastMessage?: string;
+	callback?: () => void;
+};
+
 export type TxResolverData = {
-	pendingTransactions: { tx: TxResult; msg: string }[];
-	pushTransaction: (tx: TxResult, msg: string) => void;
+	pendingTransactions: PendingTransaction[];
+	pushTransaction: (msg: PendingTransaction) => void;
 };
 
 export const TxResolverContext = createContext({} as TxResolverData);
@@ -16,19 +22,20 @@ export const TxResolverContext = createContext({} as TxResolverData);
 export function TxResolverProvider({ children }: { children: ReactNode }) {
 	const connectedWallet = useConnectedWallet();
 	const lcd = useLCDClient();
-	const [pendingTransactions, setPendingTransactions] = useState<{ tx: TxResult; msg: string }[]>([]);
+	const [pendingTransactions, setPendingTransactions] = useState<PendingTransaction[]>([]);
 
 	useEffect(() => {
-		for (const { tx, msg } of pendingTransactions) {
+		for (const { tx, customToastMessage, callback } of pendingTransactions) {
 			fetchTransactionStatus(connectedWallet?.network.lcd || lcd.config.URL, tx.result.txhash).then(() => {
 				setPendingTransactions((txs) => txs.filter((pendingTx) => pendingTx.tx.result.txhash !== tx.result.txhash));
-				toast((t) => <Text css={{ fontSize: '16px' }}>{msg}</Text>);
+				callback();
+				toast((t) => <Text css={{ fontSize: '16px' }}>{customToastMessage}</Text>);
 			});
 		}
 	}, [pendingTransactions]);
 
-	function pushTransaction(tx: TxResult, msg: string) {
-		setPendingTransactions((txs) => [...txs, { tx, msg }]);
+	function pushTransaction(msg: PendingTransaction) {
+		setPendingTransactions((txs) => [...txs, msg]);
 	}
 
 	return (

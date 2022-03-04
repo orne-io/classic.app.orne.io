@@ -1,9 +1,10 @@
 import Decimal from 'decimal.js';
 import { useCallback } from 'react';
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import { toAmount } from '@terra.kitchen/utils';
 import { Coin, MsgExecuteContract } from '@terra-money/terra.js';
 import { useConnectedWallet } from '@terra-money/wallet-provider';
+import { ORNE_QUERY_KEY, TERRA_QUERY_KEY } from 'client/cacheKeys';
 import { useApp } from 'hooks/useApp';
 import { usePendingTransaction } from 'hooks/usePendingTransaction';
 
@@ -12,6 +13,7 @@ type SwapUstParams = { amountUst: string };
 type SwapOrneParams = { amountOrne: string };
 
 export function useSwap() {
+	const queryClient = useQueryClient();
 	const connectedWallet = useConnectedWallet();
 	const computeSwapOrne = useComputeSwapOrneToUstMessage();
 	const { pushTransaction } = usePendingTransaction();
@@ -32,7 +34,14 @@ export function useSwap() {
 				msgs: [msg],
 			});
 
-			pushTransaction(tx, `Swapped ${toAmount(params.amountUst, { decimals: 0, comma: true })} UST`);
+			pushTransaction({
+				tx,
+				customToastMessage: `Swapped ${toAmount(params.amountUst, { decimals: 0, comma: true })} UST`,
+				callback() {
+					void queryClient.invalidateQueries(TERRA_QUERY_KEY.TERRA_NATIVE_BALANCES);
+					void queryClient.invalidateQueries(ORNE_QUERY_KEY.ORNE_BALANCE);
+				},
+			});
 
 			return;
 		}
@@ -48,7 +57,14 @@ export function useSwap() {
 			msgs: [msg],
 		});
 
-		pushTransaction(tx, `Swapped ${toAmount(params.amountOrne, { decimals: 0, comma: true })} $ORNE`);
+		pushTransaction({
+			tx,
+			customToastMessage: `Swapped ${toAmount(params.amountOrne, { decimals: 0, comma: true })} $ORNE`,
+			callback() {
+				void queryClient.invalidateQueries(TERRA_QUERY_KEY.TERRA_NATIVE_BALANCES);
+				void queryClient.invalidateQueries(ORNE_QUERY_KEY.ORNE_BALANCE);
+			},
+		});
 
 		return;
 	});

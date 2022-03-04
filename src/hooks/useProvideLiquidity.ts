@@ -1,10 +1,11 @@
 import Decimal from 'decimal.js';
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
+import { toAmount } from '@terra.kitchen/utils';
 import { Coin, MsgExecuteContract } from '@terra-money/terra.js';
 import { useConnectedWallet } from '@terra-money/wallet-provider';
 import { useApp } from 'hooks/useApp';
-import { usePendingTransaction } from './usePendingTransaction';
-import { toAmount } from '@terra.kitchen/utils';
+import { usePendingTransaction } from 'hooks/usePendingTransaction';
+import { ORNE_QUERY_KEY, TERRA_QUERY_KEY } from 'client/cacheKeys';
 
 type ProvideLiquidityParams = {
 	amountUst: string;
@@ -12,6 +13,7 @@ type ProvideLiquidityParams = {
 };
 
 export function useProvideLiquidity() {
+	const queryClient = useQueryClient();
 	const connectedWallet = useConnectedWallet();
 	const { contractAddress } = useApp();
 	const { pushTransaction } = usePendingTransaction();
@@ -69,13 +71,21 @@ export function useProvideLiquidity() {
 			msgs: [increaseAllowanceMsg, provideLiquidityMsg],
 		});
 
-		pushTransaction(
+		pushTransaction({
 			tx,
-			`Provided ${toAmount(params.amountOrne, { decimals: 0, comma: true })} $ORNE & ${toAmount(params.amountUst, {
-				decimals: 0,
-				comma: true,
-			})} UST for liquidity`
-		);
+			customToastMessage: `Provided ${toAmount(params.amountOrne, { decimals: 0, comma: true })} $ORNE & ${toAmount(
+				params.amountUst,
+				{
+					decimals: 0,
+					comma: true,
+				}
+			)} UST for liquidity`,
+			callback() {
+				void queryClient.invalidateQueries(TERRA_QUERY_KEY.TERRA_NATIVE_BALANCES);
+				void queryClient.invalidateQueries(ORNE_QUERY_KEY.ORNE_BALANCE);
+				void queryClient.invalidateQueries(ORNE_QUERY_KEY.ORNE_LP);
+			},
+		});
 	});
 
 	return {
