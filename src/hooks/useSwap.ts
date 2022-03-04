@@ -1,9 +1,11 @@
 import Decimal from 'decimal.js';
 import { useCallback } from 'react';
 import { useMutation } from 'react-query';
+import { toAmount } from '@terra.kitchen/utils';
 import { Coin, MsgExecuteContract } from '@terra-money/terra.js';
 import { useConnectedWallet } from '@terra-money/wallet-provider';
 import { useApp } from 'hooks/useApp';
+import { usePendingTransaction } from 'hooks/usePendingTransaction';
 
 type SwapParams = { slippage: string } & (SwapUstParams | SwapOrneParams);
 type SwapUstParams = { amountUst: string };
@@ -12,6 +14,7 @@ type SwapOrneParams = { amountOrne: string };
 export function useSwap() {
 	const connectedWallet = useConnectedWallet();
 	const computeSwapOrne = useComputeSwapOrneToUstMessage();
+	const { pushTransaction } = usePendingTransaction();
 	const { contractAddress } = useApp();
 
 	const { mutate, status } = useMutation(async (params: SwapParams) => {
@@ -22,24 +25,32 @@ export function useSwap() {
 				new Coin('uusd', new Decimal(params.amountUst).times(1_000_000)),
 			]);
 
-			return connectedWallet!.post({
+			const tx = await connectedWallet!.post({
 				gasAdjustment: '1.6',
 				gasPrices: '0.456uusd',
 				feeDenoms: ['uusd'],
 				msgs: [msg],
 			});
+
+			pushTransaction(tx, `Swapped ${toAmount(params.amountUst, { decimals: 0, comma: true })} UST`);
+
+			return;
 		}
 
 		const query = computeSwapOrne(params.amountOrne, params.slippage);
 
 		const msg = new MsgExecuteContract(connectedWallet!.walletAddress, contractAddress.token, query);
 
-		return connectedWallet!.post({
+		const tx = await connectedWallet!.post({
 			gasAdjustment: '1.6',
 			gasPrices: '0.456uusd',
 			feeDenoms: ['uusd'],
 			msgs: [msg],
 		});
+
+		pushTransaction(tx, `Swapped ${toAmount(params.amountOrne, { decimals: 0, comma: true })} $ORNE`);
+
+		return;
 	});
 
 	return {

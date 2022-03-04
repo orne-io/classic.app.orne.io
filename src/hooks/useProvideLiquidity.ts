@@ -74,7 +74,7 @@ export function useProvideLiquidity() {
 			`Provided ${toAmount(params.amountOrne, { decimals: 0, comma: true })} $ORNE & ${toAmount(params.amountUst, {
 				decimals: 0,
 				comma: true,
-			})} UST for liquidity.`
+			})} UST for liquidity`
 		);
 	});
 
