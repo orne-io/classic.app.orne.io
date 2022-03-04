@@ -1,3 +1,4 @@
+import { parse } from '@lukeed/ms';
 import { useQuery } from 'react-query';
 import { useConnectedWallet, useLCDClient } from '@terra-money/wallet-provider';
 import { ORNE_QUERY_KEY } from 'client/cacheKeys';
@@ -8,9 +9,15 @@ export function useLpBalance() {
 	const lcd = useLCDClient();
 	const connectedWallet = useConnectedWallet();
 
-	return useQuery([ORNE_QUERY_KEY.ORNE_LP], () => {
-		return lcd.wasm
-			.contractQuery(contractAddress.lp, { balance: { address: connectedWallet!.walletAddress } })
-			.then((response) => response.balance);
-	});
+	return useQuery(
+		[ORNE_QUERY_KEY.ORNE_LP],
+		() => {
+			return lcd.wasm.contractQuery(contractAddress.astroGenerator, {
+				deposit: { lp_token: contractAddress.lp, user: connectedWallet!.walletAddress },
+			});
+		},
+		{
+			staleTime: parse('1m'),
+		}
+	);
 }

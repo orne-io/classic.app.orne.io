@@ -1,6 +1,7 @@
 lockfileVersion: 5.3
 
 specifiers:
+  '@lukeed/ms': ^2.0.0
   '@radix-ui/react-dropdown-menu': ^0.1.4
   '@stitches/react': ^1.2.6
   '@terra-money/terra.js': 3.0.6
@@ -28,6 +29,7 @@ specifiers:
   vite-tsconfig-paths: ^3.3.17
 
 dependencies:
+  '@lukeed/ms': 2.0.0
   '@radix-ui/react-dropdown-menu': 0.1.4_b8fdba992ce7d797017dc07106486496
   '@stitches/react': 1.2.6_react@17.0.2
   '@terra-money/terra.js': 3.0.6
@@ -350,6 +352,11 @@ packages:
 
   /@emotion/unitless/0.7.5:
     resolution: {integrity: sha512-OWORNpfjMsSSUBVrRBVGECkhWcULOAJz9ZW8uK9qgxD+87M7jHRcvh/A96XXNhXTLmKcoYSQtBEX7lHMO7YRwg==}
+    dev: false
+
+  /@lukeed/ms/2.0.0:
+    resolution: {integrity: sha512-NOlhE40rGptwLwJhE0ZW259hcoa+nkpQRQ1FUKV4Sr2z1Eh2WfkHQ3jjBNF7YEqOrF0TOpqnyU1wClvWBrXByg==}
+    engines: {node: '>=8'}
     dev: false
 
   /@protobufjs/aspromise/1.1.2:

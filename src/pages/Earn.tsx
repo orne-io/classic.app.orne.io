@@ -6,6 +6,7 @@ import { Box, Button, Flex, Grid, Heading, Paragraph, Text } from 'components/ui
 import { useLpReward } from '../hooks/useLpReward';
 import { readAmount } from '@terra.kitchen/utils';
 import { useClaimReward } from '../hooks/useClaimReward';
+import { useLpBalance } from '../hooks/useLpBalance';
 
 enum EarnSection {
 	Provide,
@@ -14,6 +15,7 @@ enum EarnSection {
 
 export function Earn() {
 	const [sectionToDisplay, setSectionToDisplay] = useState<EarnSection>(EarnSection.Provide);
+	const { data: lpBalance, isLoading: isLoadingLpBalance } = useLpBalance();
 	const { data: reward, isLoading: isLoadingReward } = useLpReward();
 	const { mutate: withdrawReward } = useClaimReward();
 
@@ -60,13 +62,17 @@ export function Earn() {
 
 					<Flex direction="column" align="end">
 						<Text size={1}>Staked</Text>
-						<Text>1337,420 LP</Text>
+						{isLoadingLpBalance ? (
+							<Text size={0}>Loading...</Text>
+						) : (
+							<Text>~ {readAmount(lpBalance, { comma: true, fixed: 0 })} LP</Text>
+						)}
 					</Flex>
 
 					<Flex direction="column" align="end">
 						<Text size={1}>Rewards</Text>
 						{isLoadingReward ? (
-							<Text>Loading...</Text>
+							<Text size={0}>Loading...</Text>
 						) : (
 							<Flex gap={2} align="center">
 								<Text>{readAmount(reward.pending_on_proxy)} ORNE</Text>

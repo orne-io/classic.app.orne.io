@@ -8,6 +8,7 @@
 		"preview": "vite preview"
 	},
 	"dependencies": {
+		"@lukeed/ms": "^2.0.0",
 		"@radix-ui/react-dropdown-menu": "^0.1.4",
 		"@stitches/react": "^1.2.6",
 		"@terra-money/terra.js": "3.0.6",
