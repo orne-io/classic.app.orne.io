@@ -37,7 +37,7 @@ export function Withdraw() {
 					css={{ backgroundColor: '$lightGreen', borderRadius: '$rounded', p: '$2 $3' }}
 				>
 					<Flex gap={2}>
-						<Text>{withdrawing && readAmount(withdrawing.amountOrne)}</Text>
+						<Text>{withdrawing && readAmount(withdrawing.amountOrne, { comma: true })}</Text>
 						<TokenIcon>
 							<img src="/images/orne-logo.svg" alt="" />
 						</TokenIcon>
@@ -47,7 +47,7 @@ export function Withdraw() {
 						<img src="/icons/plus.svg" alt="" />
 					</ActionSeparator>
 					<Flex gap={2}>
-						<Text>{withdrawing && readAmount(withdrawing.amountUst)}</Text>
+						<Text>{withdrawing && readAmount(withdrawing.amountUst, { comma: true })}</Text>
 						<TokenIcon>
 							<img src="/icons/ust.svg" alt="" />
 						</TokenIcon>

@@ -13,7 +13,14 @@ export function useWithdrawLiquidity() {
 	const { contractAddress } = useApp();
 
 	const { mutate, status } = useMutation(async (params: WithdrawLiquidityParams) => {
-		const msg = new MsgExecuteContract(connectedWallet!.walletAddress, contractAddress.lp, {
+		const unstakeMsg = new MsgExecuteContract(connectedWallet!.walletAddress, contractAddress.astroGenerator, {
+			withdraw: {
+				lp_token: contractAddress.lp,
+				amount: new Decimal(params.amount).times(1_000_000).toString(),
+			},
+		});
+
+		const withdrawMsg = new MsgExecuteContract(connectedWallet!.walletAddress, contractAddress.lp, {
 			send: {
 				amount: new Decimal(params.amount).times(1_000_000).toString(),
 				contract: contractAddress.pair,
@@ -25,7 +32,7 @@ export function useWithdrawLiquidity() {
 			gasAdjustment: '1.6',
 			gasPrices: '0.456uusd',
 			feeDenoms: ['uusd'],
-			msgs: [msg],
+			msgs: [unstakeMsg, withdrawMsg],
 		});
 	});
 
