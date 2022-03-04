@@ -9,7 +9,6 @@ specifiers:
   '@terra.kitchen/utils': ^1.0.6
   '@types/react': ^17.0.39
   '@types/react-dom': ^17.0.11
-  '@types/styled-components': ^5.1.22
   '@vitejs/plugin-react': ^1.1.4
   big.js: ^6.1.1
   buffer: ^6.0.3
@@ -23,7 +22,6 @@ specifiers:
   react-loader-spinner: ^6.0.0-0
   react-query: ^3.34.13
   react-router-dom: ^6.2.1
-  styled-components: ^5.3.3
   typescript: ^4.5.5
   use-debounce: ^7.0.1
   vite: ^2.7.13
@@ -47,14 +45,12 @@ dependencies:
   react-loader-spinner: 6.0.0-0_281a4fa50a045c9112baf635f3bc27a7
   react-query: 3.34.13_react-dom@17.0.2+react@17.0.2
   react-router-dom: 6.2.1_react-dom@17.0.2+react@17.0.2
-  styled-components: 5.3.3_281a4fa50a045c9112baf635f3bc27a7
   use-debounce: 7.0.1_react@17.0.2
   vite-compatible-readable-stream: 3.6.0
 
 devDependencies:
   '@types/react': 17.0.39
   '@types/react-dom': 17.0.11
-  '@types/styled-components': 5.1.22
   '@vitejs/plugin-react': 1.1.4
   cross-env: 7.0.3
   prettier: 2.5.1
@@ -846,13 +842,6 @@ packages:
       tiny-warning: 1.0.3
     dev: false
 
-  /@types/hoist-non-react-statics/3.3.1:
-    resolution: {integrity: sha512-iMIqiko6ooLrTh1joXodJK5X9xeEALT1kM5G3ZLhD3hszxBdIEd5C75U834D9mLcINgD4OyZf5uQXjkuYydWvA==}
-    dependencies:
-      '@types/react': 17.0.39
-      hoist-non-react-statics: 3.3.2
-    dev: true
-
   /@types/json5/0.0.29:
     resolution: {integrity: sha1-7ihweulOEdK4J7y+UnC86n8+ce4=}
     dev: true
@@ -903,14 +892,6 @@ packages:
 
   /@types/scheduler/0.16.2:
     resolution: {integrity: sha512-hppQEBDmlwhFAXKJX2KnWLYu5yMfi91yazPb2l+lbJiwW+wdo1gNeRA+3RgNSO39WYX2euey41KEwnqesU2Jew==}
-    dev: true
-
-  /@types/styled-components/5.1.22:
-    resolution: {integrity: sha512-zQzf/0aGtgFDjB942f8IaKA6UilFziDza9wXkAX5mpiSWA/FBZBU6yUavvczulTvoR6759h6CH8HuuIcJDBgZA==}
-    dependencies:
-      '@types/hoist-non-react-statics': 3.3.1
-      '@types/react': 17.0.39
-      csstype: 3.0.10
     dev: true
 
   /@vitejs/plugin-react/1.1.4:
@@ -1736,6 +1717,7 @@ packages:
     resolution: {integrity: sha512-/gGivxi8JPKWNm/W0jSmzcMPpfpPLc3dY/6GxhX2hQ9iGj3aDfklV4ET7NjKpSinLpJ5vafa9iiGIEZg10SfBw==}
     dependencies:
       react-is: 16.13.1
+    dev: false
 
   /ieee754/1.2.1:
     resolution: {integrity: sha512-dcyqhDvX1C46lXZcVqCpK+FtMRQVdIMN6/Df5js2zouUsqG7I6sFxitIC+7KYK29KdXOLHdu9zL4sFnoVQnqaA==}
@@ -2094,6 +2076,7 @@ packages:
 
   /react-is/16.13.1:
     resolution: {integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==}
+    dev: false
 
   /react-is/17.0.2:
     resolution: {integrity: sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w==}
