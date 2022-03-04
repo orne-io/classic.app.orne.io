@@ -16,6 +16,9 @@ export const Text = styled('span', {
 		},
 
 		size: {
+			0: {
+				fontSize: '$xs',
+			},
 			1: {
 				fontSize: '$sm',
 			},

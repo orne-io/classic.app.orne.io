@@ -3,6 +3,8 @@ import { Provide } from 'components/earn/Provide';
 import { Withdraw } from 'components/earn/Withdraw';
 import { TokenPair, TokenIcon } from 'components/tokens';
 import { Box, Button, Flex, Grid, Heading, Paragraph, Text } from 'components/ui';
+import { useLpReward } from '../hooks/useLpReward';
+import { readAmount } from '@terra.kitchen/utils';
 
 enum EarnSection {
 	Provide,
@@ -11,6 +13,7 @@ enum EarnSection {
 
 export function Earn() {
 	const [sectionToDisplay, setSectionToDisplay] = useState<EarnSection>(EarnSection.Provide);
+	const { data: reward } = useLpReward();
 
 	return (
 		<Grid gap={2}>
@@ -56,7 +59,12 @@ export function Earn() {
 
 					<Flex direction="column" align="end">
 						<Text size={1}>Rewards</Text>
-						<Text>10000,000 ORNE</Text>
+						<Flex gap={2} align="center">
+							<Text>{readAmount(reward.pending_on_proxy)} ORNE</Text>
+							<Text as="small" size={0}>
+								(+ {readAmount(reward.pending)} ASTRO)
+							</Text>
+						</Flex>
 						<Button size="small" outline="dark">
 							Claim
 						</Button>
