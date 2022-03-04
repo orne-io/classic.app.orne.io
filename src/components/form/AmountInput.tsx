@@ -1,4 +1,6 @@
+import { ThreeDots } from 'react-loader-spinner';
 import { styled } from 'stitches.config';
+import { Flex } from 'components/ui';
 import type { ChangeEvent } from 'react';
 
 type Props = {
@@ -7,6 +9,7 @@ type Props = {
 	onChange?: Function;
 	placeholder?: string;
 	disabled?: boolean;
+	loading?: boolean;
 };
 
 const StyledInput = styled('input', {
@@ -25,13 +28,22 @@ const StyledInput = styled('input', {
 });
 
 const regex = /^[0-9.]*$/;
-export function AmountInput({ name, value, onChange, placeholder, disabled }: Props) {
+export function AmountInput({ name, value, onChange, placeholder, loading, disabled }: Props) {
+	loading = loading ?? true;
+
 	function handleAmountChange(e: ChangeEvent<HTMLInputElement>) {
 		if (regex.test(e.target.value) && onChange) {
 			onChange(e.target.value);
 		}
 	}
 
+	if (loading) {
+		return (
+			<Flex align="center">
+				<ThreeDots color="hsl(203,23%,42%)" height="10" />
+			</Flex>
+		);
+	}
 	return (
 		<StyledInput
 			id={name}

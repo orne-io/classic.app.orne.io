@@ -1,6 +1,5 @@
-import Decimal from 'decimal.js';
 import { FormEvent, useEffect, useState } from 'react';
-import { Fee } from '@terra-money/terra.js';
+import { Dec, Fee } from '@terra-money/terra.js';
 import { useDebounce } from 'use-debounce';
 import { useSwap } from 'hooks/useSwap';
 import { useEstimateFee } from 'hooks/useEstimateFee';
@@ -13,12 +12,14 @@ import { AmountBox } from 'components/form';
 import { ActionSeparator } from 'components/common';
 import { Box, Button, Flex, Table, Text } from 'components/ui';
 import { readAmount } from '@terra.kitchen/utils';
+import { ThreeDots } from 'react-loader-spinner';
 
 export function SwapUst({ onChangeDirection }) {
 	const [error, setError] = useState('');
 	const [amount, setAmount] = useState<string>('');
-	const [debouncedAmount] = useDebounce(amount, 200);
+	const [debouncedAmount] = useDebounce(amount, 300);
 	const [slippage, setSlippage] = useState<number>(1);
+	const [debouncedSlippage] = useDebounce(slippage, 300);
 	const [fee, setFee] = useState<Fee | null>();
 	const [estimatedOrne, setEstimatedOrne] = useState<string>('0');
 
@@ -26,26 +27,37 @@ export function SwapUst({ onChangeDirection }) {
 	const { uUST } = useTerraNativeBalances();
 	const isFirstRender = useIsFirstRender();
 
+	const [simulating, setSimulating] = useState(false);
 	const { estimate } = useEstimateFee();
 	const { simulate } = useSwapSimulation();
 
 	useEffect(() => {
 		setError('');
 
-		if (isFirstRender || !debouncedAmount) {
+		if (isFirstRender) {
 			return;
 		}
 
+		if (!debouncedAmount) {
+			resetValues();
+			return;
+		}
+
+		setSimulating(true);
+
 		Promise.all([
 			simulate({ amountUst: debouncedAmount }),
-			estimate({ amountUst: debouncedAmount, slippage: slippage.toString() }),
+			estimate({ amountUst: debouncedAmount, slippage: debouncedSlippage.toString() }),
 		])
 			.then(([simulation, fee]) => {
 				setEstimatedOrne(simulation.return_amount);
 				setFee(fee);
+				setSimulating(false);
 			})
 			.catch((e) => {
-				const errorCode = e.response.data?.code;
+				const errorCode = e.response?.data?.code;
+				resetValues();
+				setSimulating(false);
 
 				if (!errorCode) {
 					setError('Unknown error');
@@ -56,11 +68,11 @@ export function SwapUst({ onChangeDirection }) {
 					setError('Please, increase your slippage');
 				}
 			});
-	}, [debouncedAmount, slippage]);
+	}, [debouncedAmount, debouncedSlippage]);
 
 	const pricePerOrne =
-		amount && estimate ? new Decimal(amount).times(1_000_000).dividedBy(estimatedOrne).toFixed(6) : '0';
-	const feePrice = fee?.amount?.get('uusd')?.amount.dividedBy(1_000_000).toFixed(6) || '0';
+		amount && estimatedOrne !== '0' ? new Dec(amount).times(1_000_000).dividedBy(estimatedOrne).toFixed(6) : '0';
+	const feePrice = readAmount(fee?.amount?.get('uusd')?.amount, { comma: true }) || '0';
 
 	function handleSubmit(e: FormEvent) {
 		e.preventDefault();
@@ -70,6 +82,11 @@ export function SwapUst({ onChangeDirection }) {
 		}
 
 		swap({ amountUst: amount, slippage: slippage.toString() });
+	}
+
+	function resetValues() {
+		setEstimatedOrne('0');
+		setFee(null);
 	}
 
 	return (
@@ -83,7 +100,7 @@ export function SwapUst({ onChangeDirection }) {
 					</ActionSeparator>
 				</Flex>
 
-				<AmountBox label="Estimated" denom="ORNE" value={readAmount(estimatedOrne)} disabled />
+				<AmountBox label="Estimated" denom="ORNE" value={readAmount(estimatedOrne)} loading={simulating} disabled />
 			</Flex>
 
 			<Flex align="start">
@@ -91,11 +108,27 @@ export function SwapUst({ onChangeDirection }) {
 					<tbody>
 						<tr>
 							<td>Price per $ORNE</td>
-							<td>{pricePerOrne} UST</td>
+							{simulating ? (
+								<td>
+									<Box style={{ display: 'flex', justifyContent: 'end' }}>
+										<ThreeDots color="hsl(203,23%,42%)" height="10" />
+									</Box>
+								</td>
+							) : (
+								<td>{pricePerOrne} UST</td>
+							)}
 						</tr>
 						<tr>
 							<td>Tx Fee</td>
-							<td>{feePrice} UST</td>
+							{simulating ? (
+								<td>
+									<Box style={{ display: 'flex', justifyContent: 'end' }}>
+										<ThreeDots color="hsl(203,23%,42%)" height="10" />
+									</Box>
+								</td>
+							) : (
+								<td>{feePrice} UST</td>
+							)}
 						</tr>
 					</tbody>
 				</Table>
@@ -105,7 +138,9 @@ export function SwapUst({ onChangeDirection }) {
 				<Flex gap={4} direction="column" css={{ px: '$3', width: '100%' }}>
 					<Slippage slippage={slippage} onSlippageChange={(s) => setSlippage(s)} />
 
-					<Button type="submit">Swap</Button>
+					<Button type="submit" disabled={simulating}>
+						Swap
+					</Button>
 
 					{error && <Text color="red">{error}</Text>}
 				</Flex>

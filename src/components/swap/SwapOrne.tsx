@@ -12,12 +12,14 @@ import { Box, Button, Flex, Table, Text } from 'components/ui';
 import { AmountBox } from 'components/form';
 import { ActionSeparator } from 'components/common';
 import { readAmount } from '@terra.kitchen/utils';
+import { ThreeDots } from 'react-loader-spinner';
 
 export function SwapOrne({ onChangeDirection }) {
 	const [error, setError] = useState('');
 	const [amount, setAmount] = useState<string | null>();
-	const [debouncedAmount] = useDebounce(amount, 200);
+	const [debouncedAmount] = useDebounce(amount, 300);
 	const [slippage, setSlippage] = useState<number>(1);
+	const [debouncedSlippage] = useDebounce(slippage, 300);
 	const [fee, setFee] = useState<Fee | null>();
 	const [estimatedUst, setEstimatedUst] = useState<string>('0');
 
@@ -25,26 +27,37 @@ export function SwapOrne({ onChangeDirection }) {
 	const { data: orne } = useOrneBalance();
 	const isFirstRender = useIsFirstRender();
 
+	const [simulating, setSimulating] = useState(false);
 	const { estimate } = useEstimateFee();
 	const { simulate } = useSwapSimulation();
 
 	useEffect(() => {
 		setError('');
 
-		if (isFirstRender || !debouncedAmount) {
+		if (isFirstRender) {
 			return;
 		}
 
+		if (!debouncedAmount) {
+			resetValues();
+			return;
+		}
+
+		setSimulating(true);
+
 		Promise.all([
 			simulate({ amountOrne: debouncedAmount }),
-			estimate({ amountOrne: debouncedAmount, slippage: slippage.toString() }),
+			estimate({ amountOrne: debouncedAmount, slippage: debouncedSlippage.toString() }),
 		])
 			.then(([simulation, fee]) => {
 				setEstimatedUst(simulation.return_amount);
 				setFee(fee);
+				setSimulating(false);
 			})
 			.catch((e) => {
 				const errorCode = e.response.data?.code;
+				resetValues();
+				setSimulating(false);
 
 				if (!errorCode) {
 					setError('Unknown error');
@@ -55,7 +68,7 @@ export function SwapOrne({ onChangeDirection }) {
 					setError('Please, increase your slippage');
 				}
 			});
-	}, [debouncedAmount, slippage]);
+	}, [debouncedAmount, debouncedSlippage]);
 
 	const pricePerOrne =
 		amount && estimate ? new Decimal(estimatedUst).dividedBy(amount).dividedBy(1_000_000).toFixed(6) : '0';
@@ -71,6 +84,11 @@ export function SwapOrne({ onChangeDirection }) {
 		swap({ amountOrne: amount, slippage: slippage.toString() });
 	}
 
+	function resetValues() {
+		setEstimatedUst('0');
+		setFee(null);
+	}
+
 	return (
 		<Flex as="form" direction="column" autoComplete="off" onSubmit={handleSubmit}>
 			<Flex justify="between" css={{ width: '100%' }}>
@@ -82,7 +100,7 @@ export function SwapOrne({ onChangeDirection }) {
 					</ActionSeparator>
 				</Flex>
 
-				<AmountBox label="Estimated" denom="UST" value={readAmount(estimatedUst)} disabled />
+				<AmountBox label="Estimated" denom="UST" value={readAmount(estimatedUst)} loading={simulating} disabled />
 			</Flex>
 
 			<Flex align="start">
@@ -90,11 +108,27 @@ export function SwapOrne({ onChangeDirection }) {
 					<tbody>
 						<tr>
 							<td>Price per $ORNE</td>
-							<td>{pricePerOrne} UST</td>
+							{simulating ? (
+								<td>
+									<Box style={{ display: 'flex', justifyContent: 'end' }}>
+										<ThreeDots color="hsl(203,23%,42%)" height="10" />
+									</Box>
+								</td>
+							) : (
+								<td>{pricePerOrne} UST</td>
+							)}
 						</tr>
 						<tr>
 							<td>Tx Fee</td>
-							<td>{feePrice} UST</td>
+							{simulating ? (
+								<td>
+									<Box style={{ display: 'flex', justifyContent: 'end' }}>
+										<ThreeDots color="hsl(203,23%,42%)" height="10" />
+									</Box>
+								</td>
+							) : (
+								<td>{feePrice} UST</td>
+							)}
 						</tr>
 					</tbody>
 				</Table>
@@ -104,7 +138,9 @@ export function SwapOrne({ onChangeDirection }) {
 				<Flex gap={2} direction="column" css={{ px: '$3', width: '100%' }}>
 					<Slippage slippage={slippage} onSlippageChange={(s) => setSlippage(s)} />
 
-					<Button type="submit">Swap</Button>
+					<Button type="submit" disabled={simulating}>
+						Swap
+					</Button>
 
 					{error && <Text color="red">{error}</Text>}
 				</Flex>

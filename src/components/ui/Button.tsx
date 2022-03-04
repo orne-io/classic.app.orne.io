@@ -41,5 +41,11 @@ export const Button = styled('button', {
 				paddingBlock: 0,
 			},
 		},
+		disabled: {
+			true: {
+				opacity: '0.5',
+				cursor: 'not-allowed',
+			},
+		},
 	},
 });

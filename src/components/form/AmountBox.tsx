@@ -1,6 +1,6 @@
 import { readAmount } from '@terra.kitchen/utils';
 import { TokenIcon, TokenPair } from 'components/tokens';
-import { Button, Flex, Text } from 'components/ui';
+import { Box, Button, Flex, Text } from 'components/ui';
 import { AmountInput } from './AmountInput';
 
 type Props = {
@@ -9,14 +9,16 @@ type Props = {
 	denom: string;
 	value: string | null;
 	onChange?: Function;
+	loading?: boolean;
 	hasMax?: boolean;
 	disabled?: boolean;
 };
 
-export function AmountBox({ label, balance, denom, value, onChange, hasMax, disabled }: Props) {
+export function AmountBox({ label, balance, denom, value, onChange, hasMax, disabled, loading }: Props) {
 	label = label ?? 'Balance';
 	hasMax = hasMax || false;
 	disabled = disabled || false;
+	loading = loading ?? false;
 
 	function setMaximumAmount() {
 		if (onChange) {
@@ -25,7 +27,11 @@ export function AmountBox({ label, balance, denom, value, onChange, hasMax, disa
 	}
 
 	return (
-		<Flex gap={2} direction="column" css={{ backgroundColor: '$lightGreen', borderRadius: '$rounded', p: '$2 $3' }}>
+		<Flex
+			gap={2}
+			direction="column"
+			css={{ backgroundColor: '$lightGreen', borderRadius: '$rounded', p: '$2 $3', width: '100%' }}
+		>
 			<Flex justify="between">
 				<Text>{label}</Text>
 				{balance && (
@@ -40,7 +46,15 @@ export function AmountBox({ label, balance, denom, value, onChange, hasMax, disa
 				)}
 			</Flex>
 			<Flex justify="between">
-				<AmountInput name={denom} placeholder="0.00" value={value} onChange={onChange} disabled={disabled} />
+				<AmountInput
+					name={denom}
+					placeholder="0.00"
+					value={value}
+					onChange={onChange}
+					loading={loading}
+					disabled={disabled}
+				/>
+
 				<Flex gap={2}>
 					{denom.toLowerCase() === 'lp' ? (
 						<>
