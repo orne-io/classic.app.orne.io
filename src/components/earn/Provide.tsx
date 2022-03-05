@@ -1,6 +1,6 @@
 import Decimal from 'decimal.js';
 import { useState } from 'react';
-import { readAmount } from '@terra.kitchen/utils';
+import { readAmount, toAmount } from '@terra.kitchen/utils';
 import { useProvideLiquidity } from 'hooks/useProvideLiquidity';
 import { useSwapSimulation } from 'hooks/useSwapSimulation';
 import { ActionSeparator } from 'components/common';
@@ -17,6 +17,32 @@ export function Provide() {
 
 	const [amountOrne, setAmountOrne] = useState<string | null>('');
 	const [amountUst, setAmountUst] = useState<string | null>('');
+
+	const [fetchingMax, setFetchingMax] = useState(false);
+	async function useMaxAmount() {
+		setFetchingMax(true);
+
+		const estimatedReturn = await simulate({ amountOrne: readAmount(orne) }).then(
+			({ return_amount, spread_amount, commission_amount }) =>
+				new Decimal(return_amount).plus(spread_amount).plus(commission_amount)
+		);
+
+		if (+readAmount(estimatedReturn) < +ust) {
+			const estimatedReturn = await simulate({ amountUst: readAmount(ust) }).then(
+				({ return_amount, spread_amount, commission_amount }) =>
+					new Decimal(return_amount).plus(spread_amount).plus(commission_amount)
+			);
+
+			setAmountUst(readAmount(ust));
+			setAmountOrne(readAmount(estimatedReturn));
+			setFetchingMax(false);
+			return;
+		}
+
+		setAmountUst(readAmount(estimatedReturn));
+		setAmountOrne(readAmount(orne));
+		setFetchingMax(false);
+	}
 
 	async function handleUstAmountChange(amount: string) {
 		setAmountUst(amount);
@@ -52,7 +78,7 @@ export function Provide() {
 		<Grid as="form" gap={2} onSubmit={handleSubmit}>
 			<Flex align="center" gap={2}>
 				<Text>Stake ORNE and UST</Text>
-				<Button type="button" size="small" outline="dark">
+				<Button type="button" size="small" outline="dark" onClick={useMaxAmount}>
 					Max
 				</Button>
 			</Flex>
@@ -63,6 +89,7 @@ export function Provide() {
 					balance={orne}
 					loadingBalance={isLoadingOrne}
 					value={amountOrne}
+					loading={fetchingMax}
 					onChange={handleOrneAmountChange}
 				/>
 
@@ -77,6 +104,7 @@ export function Provide() {
 					balance={ust}
 					loadingBalance={isLoadingUst}
 					value={amountUst}
+					loading={fetchingMax}
 					onChange={handleUstAmountChange}
 				/>
 			</Flex>
