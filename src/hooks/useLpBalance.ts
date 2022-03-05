@@ -10,10 +10,14 @@ export function useLpBalance() {
 	const connectedWallet = useConnectedWallet();
 
 	return useQuery(
-		[ORNE_QUERY_KEY.ORNE_LP],
+		[ORNE_QUERY_KEY.ORNE_LP, connectedWallet?.walletAddress],
 		() => {
+			if (!connectedWallet) {
+				return;
+			}
+
 			return lcd.wasm.contractQuery(contractAddress.astroGenerator, {
-				deposit: { lp_token: contractAddress.lp, user: connectedWallet!.walletAddress },
+				deposit: { lp_token: contractAddress.lp, user: connectedWallet.walletAddress },
 			});
 		},
 		{

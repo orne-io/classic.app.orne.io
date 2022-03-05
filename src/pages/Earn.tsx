@@ -8,6 +8,7 @@ import { readAmount } from '@terra.kitchen/utils';
 import { useClaimReward } from '../hooks/useClaimReward';
 import { useLpBalance } from '../hooks/useLpBalance';
 import { ThreeDots } from 'react-loader-spinner';
+import { useConnectedWallet } from '@terra-money/wallet-provider';
 
 enum EarnSection {
 	Provide,
@@ -15,10 +16,13 @@ enum EarnSection {
 }
 
 export function Earn() {
+	const connectedWallet = useConnectedWallet();
 	const [sectionToDisplay, setSectionToDisplay] = useState<EarnSection>(EarnSection.Provide);
 	const { data: lpBalance, isLoading: isLoadingLpBalance } = useLpBalance();
 	const { data: reward, isLoading: isLoadingReward } = useLpReward();
 	const { mutate: withdrawReward } = useClaimReward();
+
+	const hasConnectedWallet = connectedWallet !== undefined;
 
 	function handleClaimReward() {
 		withdrawReward();
@@ -79,16 +83,22 @@ export function Earn() {
 								<ThreeDots color="hsl(203,23%,42%)" height="10" />
 							</Box>
 						) : (
-							<Flex gap={2} align="center">
-								<Text>{readAmount(reward.pending_on_proxy)} ORNE</Text>
-								<Text as="small" size={0}>
-									(+ {readAmount(reward.pending)} ASTRO)
-								</Text>
-							</Flex>
+							hasConnectedWallet && (
+								<Flex gap={2} align="center">
+									<Text>{readAmount(reward.pending_on_proxy)} ORNE</Text>
+									<Text as="small" size={0}>
+										(+ {readAmount(reward.pending)} ASTRO)
+									</Text>
+								</Flex>
+							)
 						)}
-						<Button css={{ mt: '$2' }} size="small" outline="dark" onClick={handleClaimReward}>
-							Claim
-						</Button>
+						{hasConnectedWallet ? (
+							<Button css={{ mt: '$2' }} size="small" outline="dark" onClick={handleClaimReward}>
+								Claim
+							</Button>
+						) : (
+							0
+						)}
 					</Flex>
 				</Flex>
 

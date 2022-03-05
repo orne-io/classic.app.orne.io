@@ -14,11 +14,15 @@ export function useOrneBalance() {
 	const connectedWallet = useConnectedWallet();
 
 	return useQuery(
-		[ORNE_QUERY_KEY.ORNE_BALANCE],
+		[ORNE_QUERY_KEY.ORNE_BALANCE, connectedWallet?.walletAddress],
 		async () => {
+			if (!connectedWallet) {
+				return;
+			}
+
 			return lcd.wasm
 				.contractQuery<BalanceQueryResult>(contractAddress.token, {
-					balance: { address: connectedWallet!.terraAddress },
+					balance: { address: connectedWallet.terraAddress },
 				})
 				.then((response) => response.balance);
 		},

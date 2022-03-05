@@ -15,6 +15,10 @@ export function useEstimateFee() {
 	const { contractAddress } = useApp();
 
 	const { mutateAsync } = useMutation(async (params: SwapParams) => {
+		if (!connectedWallet) {
+			return;
+		}
+
 		if ('amountUst' in params) {
 			const query = computeSwapUstToOrneMessage(params.amountUst, params.slippage);
 

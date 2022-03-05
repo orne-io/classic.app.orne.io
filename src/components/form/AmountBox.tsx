@@ -5,6 +5,7 @@ import { AmountInput } from './AmountInput';
 import { ThreeDots } from 'react-loader-spinner';
 
 type Props = {
+	hasConnectedWallet?: boolean;
 	label?: string;
 	balance?: string | number;
 	denom: string;
@@ -17,6 +18,7 @@ type Props = {
 };
 
 export function AmountBox({
+	hasConnectedWallet,
 	label,
 	balance,
 	denom,
@@ -47,7 +49,7 @@ export function AmountBox({
 		>
 			<Flex justify="between">
 				<Text>{label}</Text>
-				{loadingBalance !== undefined && (
+				{hasConnectedWallet === true && loadingBalance !== undefined && (
 					<Flex gap={2}>
 						{loadingBalance ? (
 							<Flex align="center">

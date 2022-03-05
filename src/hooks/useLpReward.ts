@@ -15,7 +15,7 @@ export function useLpReward() {
 	const { contractAddress } = useApp();
 
 	return useQuery(
-		[ORNE_QUERY_KEY.ORNE_REWARD],
+		[ORNE_QUERY_KEY.ORNE_REWARD, connectedWallet?.walletAddress],
 		() => {
 			if (!connectedWallet) {
 				return;

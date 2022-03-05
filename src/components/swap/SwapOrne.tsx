@@ -13,9 +13,11 @@ import { AmountBox } from 'components/form';
 import { ActionSeparator } from 'components/common';
 import { readAmount } from '@terra.kitchen/utils';
 import { ThreeDots } from 'react-loader-spinner';
+import { useConnectedWallet } from '@terra-money/wallet-provider';
 
 export function SwapOrne({ onChangeDirection }) {
 	const [error, setError] = useState('');
+	const connectedWallet = useConnectedWallet();
 	const [amount, setAmount] = useState<string | null>();
 	const [debouncedAmount] = useDebounce(amount, 300);
 	const [slippage, setSlippage] = useState<number>(1);
@@ -93,6 +95,7 @@ export function SwapOrne({ onChangeDirection }) {
 		<Flex as="form" direction="column" autoComplete="off" onSubmit={handleSubmit}>
 			<Flex justify="between" css={{ width: '100%' }}>
 				<AmountBox
+					hasConnectedWallet={connectedWallet !== undefined}
 					hasMax={true}
 					denom="ORNE"
 					balance={orne}

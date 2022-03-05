@@ -8,9 +8,13 @@ export function useUstBalance() {
 	const connectedWallet = useConnectedWallet();
 
 	return useQuery(
-		[TERRA_QUERY_KEY.TERRA_NATIVE_BALANCES],
+		[TERRA_QUERY_KEY.TERRA_NATIVE_BALANCES, connectedWallet?.walletAddress],
 		() => {
-			return lcd.bank.balance(connectedWallet!.walletAddress).then(([coins]) => coins.get('uusd')?.amount.toString());
+			if (!connectedWallet) {
+				return;
+			}
+
+			return lcd.bank.balance(connectedWallet.walletAddress).then(([coins]) => coins.get('uusd')?.amount.toString());
 		},
 		{
 			staleTime: parse('1m')!,

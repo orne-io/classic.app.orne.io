@@ -13,8 +13,10 @@ import { Box, Button, Flex, Table, Text } from 'components/ui';
 import { readAmount } from '@terra.kitchen/utils';
 import { ThreeDots } from 'react-loader-spinner';
 import { useUstBalance } from '../../hooks/useUstBalance';
+import { useConnectedWallet } from '@terra-money/wallet-provider';
 
 export function SwapUst({ onChangeDirection }) {
+	const connectedWallet = useConnectedWallet();
 	const [error, setError] = useState('');
 	const [amount, setAmount] = useState<string>('');
 	const [debouncedAmount] = useDebounce(amount, 300);
@@ -93,6 +95,7 @@ export function SwapUst({ onChangeDirection }) {
 		<Flex as="form" direction="column" autoComplete="off" onSubmit={handleSubmit}>
 			<Flex justify="between" css={{ width: '100%' }}>
 				<AmountBox
+					hasConnectedWallet={connectedWallet !== undefined}
 					hasMax={true}
 					denom="UST"
 					balance={ust}

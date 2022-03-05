@@ -9,8 +9,10 @@ import { useState } from 'react';
 import { useShare } from '../../hooks/useShare';
 import { readAmount, toAmount } from '@terra.kitchen/utils';
 import { ThreeDots } from 'react-loader-spinner';
+import { useConnectedWallet } from '@terra-money/wallet-provider';
 
 export function Withdraw() {
+	const connectedWallet = useConnectedWallet();
 	const { data: balance, isLoadingLpBalance } = useLpBalance();
 	const { withdraw } = useWithdrawLiquidity();
 	const [amount, setAmount] = useState('');
@@ -18,8 +20,14 @@ export function Withdraw() {
 
 	const { data: withdrawing, isLoading } = useShare(toAmount(debouncedAmount));
 
+	const hasConnectedWallet = connectedWallet !== undefined;
+
 	function handleSubmit() {
 		withdraw({ amount });
+	}
+
+	if (!hasConnectedWallet) {
+		return <Text>Please, connect a wallet to continue</Text>;
 	}
 
 	return (
@@ -29,6 +37,7 @@ export function Withdraw() {
 			</Flex>
 			<Flex direction="column" gap={3}>
 				<AmountBox
+					hasConnectedWallet={hasConnectedWallet}
 					hasMax={true}
 					denom={'LP'}
 					balance={balance || '0'}

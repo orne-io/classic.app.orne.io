@@ -8,8 +8,10 @@ import { AmountBox } from 'components/form';
 import { Button, Flex, Grid, Text } from 'components/ui';
 import { useUstBalance } from 'hooks/useUstBalance';
 import { useOrneBalance } from 'hooks/useOrneBalance';
+import { useConnectedWallet } from '@terra-money/wallet-provider';
 
 export function Provide() {
+	const connectedWallet = useConnectedWallet();
 	const { data: ust, isLoading: isLoadingUst } = useUstBalance();
 	const { data: orne, isLoading: isLoadingOrne } = useOrneBalance();
 	const { provide } = useProvideLiquidity();
@@ -17,6 +19,8 @@ export function Provide() {
 
 	const [amountOrne, setAmountOrne] = useState<string | null>('');
 	const [amountUst, setAmountUst] = useState<string | null>('');
+
+	const hasConnectedWallet = connectedWallet !== undefined;
 
 	const [fetchingMax, setFetchingMax] = useState(false);
 	async function useMaxAmount() {
@@ -74,6 +78,10 @@ export function Provide() {
 		provide({ amountUst, amountOrne });
 	}
 
+	if (!hasConnectedWallet) {
+		return <Text>Please, connect a wallet to continue</Text>;
+	}
+
 	return (
 		<Grid as="form" gap={2} onSubmit={handleSubmit}>
 			<Flex align="center" gap={2}>
@@ -85,6 +93,7 @@ export function Provide() {
 
 			<Flex justify="between" css={{ width: '100%' }}>
 				<AmountBox
+					hasConnectedWallet={hasConnectedWallet}
 					denom="ORNE"
 					balance={orne}
 					loadingBalance={isLoadingOrne}
@@ -100,6 +109,7 @@ export function Provide() {
 				</Flex>
 
 				<AmountBox
+					hasConnectedWallet={hasConnectedWallet}
 					denom="UST"
 					balance={ust}
 					loadingBalance={isLoadingUst}
