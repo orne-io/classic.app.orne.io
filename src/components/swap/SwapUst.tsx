@@ -5,7 +5,6 @@ import { useSwap } from 'hooks/useSwap';
 import { useEstimateFee } from 'hooks/useEstimateFee';
 import { useIsFirstRender } from 'hooks/useIsFirstRender';
 import { Slippage } from 'components/tx/Slippage';
-import { useTerraNativeBalances } from 'hooks/useTerraNativeBalances';
 import { useSwapSimulation } from 'hooks/useSwapSimulation';
 
 import { AmountBox } from 'components/form';
@@ -13,6 +12,7 @@ import { ActionSeparator } from 'components/common';
 import { Box, Button, Flex, Table, Text } from 'components/ui';
 import { readAmount } from '@terra.kitchen/utils';
 import { ThreeDots } from 'react-loader-spinner';
+import { useUstBalance } from '../../hooks/useUstBalance';
 
 export function SwapUst({ onChangeDirection }) {
 	const [error, setError] = useState('');
@@ -24,7 +24,7 @@ export function SwapUst({ onChangeDirection }) {
 	const [estimatedOrne, setEstimatedOrne] = useState<string>('0');
 
 	const { swap } = useSwap();
-	const { uUST } = useTerraNativeBalances();
+	const { data: ust, isLoading: isLoadingUst } = useUstBalance();
 	const isFirstRender = useIsFirstRender();
 
 	const [simulating, setSimulating] = useState(false);
@@ -92,7 +92,14 @@ export function SwapUst({ onChangeDirection }) {
 	return (
 		<Flex as="form" direction="column" autoComplete="off" onSubmit={handleSubmit}>
 			<Flex justify="between" css={{ width: '100%' }}>
-				<AmountBox hasMax={true} denom="UST" balance={uUST} value={amount} onChange={setAmount} />
+				<AmountBox
+					hasMax={true}
+					denom="UST"
+					balance={ust}
+					loadingBalance={isLoadingUst}
+					value={amount}
+					onChange={setAmount}
+				/>
 
 				<Flex align="center" justify="center" css={{ p: '$3', width: '25%' }}>
 					<ActionSeparator onClick={() => onChangeDirection()} css={{ cursor: 'pointer' }}>

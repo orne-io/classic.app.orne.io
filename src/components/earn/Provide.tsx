@@ -1,15 +1,15 @@
 import Decimal from 'decimal.js';
 import { useState } from 'react';
-import { readAmount, toAmount } from '@terra.kitchen/utils';
+import { readAmount } from '@terra.kitchen/utils';
 import { useProvideLiquidity } from 'hooks/useProvideLiquidity';
-import { useTerraNativeBalances } from 'hooks/useTerraNativeBalances';
 import { useSwapSimulation } from 'hooks/useSwapSimulation';
 import { ActionSeparator } from 'components/common';
 import { AmountBox } from 'components/form';
-import { Box, Button, Flex, Grid, Table, Text } from 'components/ui';
+import { Button, Flex, Grid, Text } from 'components/ui';
+import { useUstBalance } from '../../hooks/useUstBalance';
 
 export function Provide() {
-	const { uUST } = useTerraNativeBalances();
+	const { data: ust, isLoading: isLoadingUst } = useUstBalance();
 	const { provide } = useProvideLiquidity();
 	const { simulate } = useSwapSimulation();
 
@@ -64,7 +64,13 @@ export function Provide() {
 					</ActionSeparator>
 				</Flex>
 
-				<AmountBox denom="UST" balance={uUST} value={amountUst} onChange={handleUstAmountChange} />
+				<AmountBox
+					denom="UST"
+					balance={ust}
+					loadingBalance={isLoadingUst}
+					value={amountUst}
+					onChange={handleUstAmountChange}
+				/>
 			</Flex>
 
 			<Flex align="start" justify="end">
