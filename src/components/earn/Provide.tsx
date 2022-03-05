@@ -6,10 +6,12 @@ import { useSwapSimulation } from 'hooks/useSwapSimulation';
 import { ActionSeparator } from 'components/common';
 import { AmountBox } from 'components/form';
 import { Button, Flex, Grid, Text } from 'components/ui';
-import { useUstBalance } from '../../hooks/useUstBalance';
+import { useUstBalance } from 'hooks/useUstBalance';
+import { useOrneBalance } from 'hooks/useOrneBalance';
 
 export function Provide() {
 	const { data: ust, isLoading: isLoadingUst } = useUstBalance();
+	const { data: orne, isLoading: isLoadingOrne } = useOrneBalance();
 	const { provide } = useProvideLiquidity();
 	const { simulate } = useSwapSimulation();
 
@@ -56,7 +58,13 @@ export function Provide() {
 			</Flex>
 
 			<Flex justify="between" css={{ width: '100%' }}>
-				<AmountBox denom="ORNE" balance={'420'} value={amountOrne} onChange={handleOrneAmountChange} />
+				<AmountBox
+					denom="ORNE"
+					balance={orne}
+					loadingBalance={isLoadingOrne}
+					value={amountOrne}
+					onChange={handleOrneAmountChange}
+				/>
 
 				<Flex align="center" justify="center" css={{ p: '$3', width: '25%' }}>
 					<ActionSeparator>

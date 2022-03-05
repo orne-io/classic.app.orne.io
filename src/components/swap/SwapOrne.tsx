@@ -24,7 +24,7 @@ export function SwapOrne({ onChangeDirection }) {
 	const [estimatedUst, setEstimatedUst] = useState<string>('0');
 
 	const { swap } = useSwap();
-	const { data: orne } = useOrneBalance();
+	const { data: orne, isLoading: isLoadingOrne } = useOrneBalance();
 	const isFirstRender = useIsFirstRender();
 
 	const [simulating, setSimulating] = useState(false);
@@ -92,7 +92,14 @@ export function SwapOrne({ onChangeDirection }) {
 	return (
 		<Flex as="form" direction="column" autoComplete="off" onSubmit={handleSubmit}>
 			<Flex justify="between" css={{ width: '100%' }}>
-				<AmountBox hasMax={true} denom="ORNE" balance={orne?.balance} value={amount} onChange={setAmount} />
+				<AmountBox
+					hasMax={true}
+					denom="ORNE"
+					balance={orne}
+					loadingBalance={isLoadingOrne}
+					value={amount}
+					onChange={setAmount}
+				/>
 
 				<Flex align="center" justify="center" css={{ p: '$3', width: '25%' }}>
 					<ActionSeparator onClick={() => onChangeDirection()} css={{ cursor: 'pointer' }}>

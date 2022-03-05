@@ -47,7 +47,7 @@ export function AmountBox({
 		>
 			<Flex justify="between">
 				<Text>{label}</Text>
-				{balance && (
+				{loadingBalance !== undefined && (
 					<Flex gap={2}>
 						{loadingBalance ? (
 							<Flex align="center">
