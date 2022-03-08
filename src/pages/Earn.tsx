@@ -9,6 +9,7 @@ import { useClaimReward } from '../hooks/useClaimReward';
 import { useLpBalance } from '../hooks/useLpBalance';
 import { ThreeDots } from 'react-loader-spinner';
 import { useConnectedWallet } from '@terra-money/wallet-provider';
+import { usePool } from '../hooks/usePool';
 
 enum EarnSection {
 	Provide,
@@ -17,6 +18,7 @@ enum EarnSection {
 
 export function Earn() {
 	const connectedWallet = useConnectedWallet();
+	const { data: pool, isLoading: isLoadingPool } = usePool();
 	const [sectionToDisplay, setSectionToDisplay] = useState<EarnSection>(EarnSection.Provide);
 	const { data: lpBalance, isLoading: isLoadingLpBalance } = useLpBalance();
 	const { data: reward, isLoading: isLoadingReward } = useLpReward();
@@ -62,7 +64,13 @@ export function Earn() {
 
 					<Flex direction="column" align="end">
 						<Text size={1}>Liquidity</Text>
-						<Text>12,3m UST</Text>
+						{isLoadingPool ? (
+							<Box css={{ mt: '$2' }}>
+								<ThreeDots color="hsl(203,23%,42%)" height="10" />
+							</Box>
+						) : (
+							<Text>$ {readAmount(pool.ust.plus(pool.orne.times(pool.orne_price)), { comma: true, fixed: 0 })}</Text>
+						)}
 					</Flex>
 
 					<Flex direction="column" align="end">
