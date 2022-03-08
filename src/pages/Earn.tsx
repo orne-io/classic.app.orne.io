@@ -1,15 +1,16 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Provide } from 'components/earn/Provide';
 import { Withdraw } from 'components/earn/Withdraw';
 import { TokenPair, TokenIcon } from 'components/tokens';
 import { Box, Button, Flex, Grid, Heading, Paragraph, Text } from 'components/ui';
 import { useLpReward } from '../hooks/useLpReward';
-import { readAmount } from '@terra.kitchen/utils';
+import { readAmount, readPercent } from '@terra.kitchen/utils';
 import { useClaimReward } from '../hooks/useClaimReward';
 import { useLpBalance } from '../hooks/useLpBalance';
 import { ThreeDots } from 'react-loader-spinner';
 import { useConnectedWallet } from '@terra-money/wallet-provider';
 import { usePool } from '../hooks/usePool';
+import { Dec } from '@terra-money/terra.js';
 
 enum EarnSection {
 	Provide,
@@ -25,6 +26,17 @@ export function Earn() {
 	const { mutate: withdrawReward } = useClaimReward();
 
 	const hasConnectedWallet = connectedWallet !== undefined;
+
+	const [APR, setAPR] = useState();
+	const [liquidity, setLiquidity] = useState();
+
+	useEffect(() => {
+		if (!pool) return;
+
+		const liquidity = pool.ust.plus(pool.orne.times(pool.orne_price));
+		setLiquidity(liquidity);
+		setAPR(new Dec(10_000_00).times(pool.orne_price).dividedBy(readAmount(liquidity.dividedBy(100))));
+	}, [pool]);
 
 	function handleClaimReward() {
 		withdrawReward();
@@ -59,7 +71,13 @@ export function Earn() {
 
 					<Flex direction="column" align="end">
 						<Text size={1}>APR</Text>
-						<Text>124,32%</Text>
+						{isLoadingPool ? (
+							<Box css={{ mt: '$2' }}>
+								<ThreeDots color="hsl(203,23%,42%)" height="10" />
+							</Box>
+						) : (
+							<Text>{readPercent(APR)}</Text>
+						)}
 					</Flex>
 
 					<Flex direction="column" align="end">
@@ -69,7 +87,7 @@ export function Earn() {
 								<ThreeDots color="hsl(203,23%,42%)" height="10" />
 							</Box>
 						) : (
-							<Text>$ {readAmount(pool.ust.plus(pool.orne.times(pool.orne_price)), { comma: true, fixed: 0 })}</Text>
+							<Text>$ {readAmount(liquidity, { comma: true, fixed: 0 })}</Text>
 						)}
 					</Flex>
 
