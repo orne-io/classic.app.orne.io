@@ -25,7 +25,11 @@ export function Header() {
 
 			<Flex gap={4}>
 				{pendingTransactions.length > 0 && (
-					<Flex gap={5} align="center" css={{ backgroundColor: '$lightGreen', borderRadius: '50px', px: '$4' }}>
+					<Flex
+						gap={5}
+						align="center"
+						css={{ backgroundColor: '$lightGreen', borderRadius: '50px', boxShadow: '$base', px: '$4' }}
+					>
 						<Oval
 							ariaLabel="loading-indicator"
 							height={25}
@@ -34,7 +38,7 @@ export function Header() {
 							color="hsl(203,23%,42%)"
 							secondaryColor="hsl(173,29%,76%)"
 						/>
-						<Text size={1}>{pendingTransactions.length} Pending Transaction...</Text>
+						<Text size={1}>Pending Transaction...</Text>
 					</Flex>
 				)}
 				{status === WalletStatus.WALLET_NOT_CONNECTED && <ConnectWalletButton />}

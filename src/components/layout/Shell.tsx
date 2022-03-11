@@ -64,8 +64,8 @@ export function Shell({ children }: { children: ReactNode }) {
 					style: {
 						backgroundColor: 'hsl(168,26%,93%)',
 						borderRadius: '5px',
+						boxShadow: '$base',
 						padding: '8px 16px',
-						boxShadow: 'none',
 					},
 				}}
 				containerStyle={{
