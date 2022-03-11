@@ -30,6 +30,7 @@ export const globalStyles = globalCss({
 		backgroundColor: '$backgroundColor',
 		color: '$textColor',
 		height: '100%',
+		scrollbarGutter: 'stable both-edges',
 	},
 
 	'body': {
