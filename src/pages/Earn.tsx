@@ -112,9 +112,9 @@ export function Earn() {
 							hasConnectedWallet && (
 								<Flex gap={2} align="center">
 									<Text>{readAmount(reward.pending_on_proxy)} ORNE</Text>
-									<Text as="small" size={0}>
-										(+ {readAmount(reward.pending)} ASTRO)
-									</Text>
+									{/*<Text as="small" size={0}>*/}
+									{/*	(+ {readAmount(reward.pending)} ASTRO)*/}
+									{/*</Text>*/}
 								</Flex>
 							)
 						)}
