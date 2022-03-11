@@ -1,8 +1,8 @@
+import { parse } from '@lukeed/ms';
 import { useConnectedWallet, useLCDClient } from '@terra-money/wallet-provider';
 import { useApp } from './useApp';
 import { useQuery } from 'react-query';
 import { ORNE_QUERY_KEY } from '../client/cacheKeys';
-import Decimal from 'decimal.js';
 
 type PendingTokenQueryResult = {
 	pending: string;
@@ -31,7 +31,7 @@ export function useLpReward() {
 			return lcd.wasm.contractQuery<PendingTokenQueryResult>(contractAddress.astroGenerator, msg);
 		},
 		{
-			refetchInterval: 30 * 1000, // 30s
+			refetchInterval: parse('5m')!,
 		}
 	);
 }
