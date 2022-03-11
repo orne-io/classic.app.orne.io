@@ -7,14 +7,16 @@ import { globalCss } from 'stitches.config';
 export const globalStyles = globalCss({
 	'@font-face': [
 		{
-			fontFamily: 'Myriad Pro',
+			fontFamily: 'Quicksand',
 			fontWeight: 600,
-			src: "url('/fonts/MyriadPro-Bold.woff2') format('woff2')",
+			src: "url('/fonts/Quicksand-SemiBold.woff2') format('woff2'), url('/fonts/Quicksand-SemiBold.woff') format('woff2')",
+			fontDisplay: 'swap',
 		},
 		{
-			fontFamily: 'Myriad Pro',
+			fontFamily: 'Quicksand',
 			fontWeight: 400,
-			src: "url('/fonts/MyriadPro-Regular.woff2') format('woff2')",
+			src: "url('/fonts/Quicksand-Regular.woff2') format('woff2'), url('/fonts/Quicksand-Regular.woff2') format('woff')",
+			fontDisplay: 'swap',
 		},
 	],
 
