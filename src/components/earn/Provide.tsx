@@ -1,6 +1,7 @@
 import Decimal from 'decimal.js';
 import { useState } from 'react';
-import { readAmount, toAmount } from '@terra.kitchen/utils';
+import { useDebounce, useDebouncedCallback } from 'use-debounce';
+import { readAmount } from '@terra.kitchen/utils';
 import { useProvideLiquidity } from 'hooks/useProvideLiquidity';
 import { useSwapSimulation } from 'hooks/useSwapSimulation';
 import { ActionSeparator } from 'components/common';
@@ -17,8 +18,8 @@ export function Provide() {
 	const { provide } = useProvideLiquidity();
 	const { simulate } = useSwapSimulation();
 
-	const [amountOrne, setAmountOrne] = useState<string | null>('');
-	const [amountUst, setAmountUst] = useState<string | null>('');
+	const [amountOrne, setAmountOrne] = useState<string>('');
+	const [amountUst, setAmountUst] = useState<string>('');
 
 	const hasConnectedWallet = connectedWallet !== undefined;
 
@@ -48,26 +49,53 @@ export function Provide() {
 		setFetchingMax(false);
 	}
 
-	async function handleUstAmountChange(amount: string) {
-		setAmountUst(amount);
-
+	const [fetchingOrne, setFetchingOrne] = useState(false);
+	const computeOrneReturns = useDebouncedCallback(async (amount: string) => {
+		setFetchingOrne(true);
 		const estimatedReturn = await simulate({ amountUst: amount }).then(
 			({ return_amount, spread_amount, commission_amount }) =>
 				new Decimal(return_amount).plus(spread_amount).plus(commission_amount)
 		);
 
-		setAmountOrne(readAmount(estimatedReturn));
-	}
+		if (amountUst) {
+			setAmountOrne(readAmount(estimatedReturn));
+		}
+		setFetchingOrne(false);
+	}, 700);
 
-	async function handleOrneAmountChange(amount: string) {
-		setAmountOrne(amount);
-
+	const [fetchingUst, setFetchingUst] = useState(false);
+	const computeUstReturns = useDebouncedCallback(async (amount: string) => {
+		setFetchingUst(true);
 		const estimatedReturn = await simulate({ amountOrne: amount }).then(
 			({ return_amount, spread_amount, commission_amount }) =>
 				new Decimal(return_amount).plus(spread_amount).plus(commission_amount)
 		);
 
-		setAmountUst(readAmount(estimatedReturn));
+		if (amountOrne) {
+			setAmountUst(readAmount(estimatedReturn));
+		}
+		setFetchingUst(false);
+	}, 700);
+
+	async function handleUstAmountChange(amount: string) {
+		setAmountUst(amount);
+
+		if (!amount) {
+			setAmountOrne('');
+			return;
+		}
+
+		computeOrneReturns(amount);
+	}
+	async function handleOrneAmountChange(amount: string) {
+		setAmountOrne(amount);
+
+		if (!amount) {
+			setAmountUst('');
+			return;
+		}
+
+		computeUstReturns(amount);
 	}
 
 	function handleSubmit(e) {
@@ -98,7 +126,7 @@ export function Provide() {
 					balance={orne}
 					loadingBalance={isLoadingOrne}
 					value={amountOrne}
-					loading={fetchingMax}
+					loading={fetchingMax || fetchingOrne}
 					onChange={handleOrneAmountChange}
 				/>
 
@@ -114,7 +142,7 @@ export function Provide() {
 					balance={ust}
 					loadingBalance={isLoadingUst}
 					value={amountUst}
-					loading={fetchingMax}
+					loading={fetchingMax || fetchingUst}
 					onChange={handleUstAmountChange}
 				/>
 			</Flex>
