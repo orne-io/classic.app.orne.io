@@ -28,6 +28,7 @@ export function useClaimReward() {
 
 		pushTransaction({
 			tx,
+			customToastMessage: 'Reward claimed',
 			callback() {
 				void queryClient.invalidateQueries(ORNE_QUERY_KEY.ORNE_BALANCE);
 				void queryClient.invalidateQueries(ORNE_QUERY_KEY.ORNE_REWARD);
