@@ -1,6 +1,6 @@
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import { ConnectType, useWallet } from '@terra-money/wallet-provider';
-import { Trigger, Balance, WalletAddress, WalletIcon, Content, Item } from './ButtonStyle';
+import { Trigger, Content, Item } from './ButtonStyle';
 
 const ConnectionNameDict: Partial<Record<ConnectType, string>> = {
 	[ConnectType.EXTENSION]: 'Extension',

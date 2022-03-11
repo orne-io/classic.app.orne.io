@@ -2,13 +2,18 @@ import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import { styled } from 'stitches.config';
 
 export const Trigger = styled(DropdownMenu.Trigger, {
-	alignItems: 'center',
-	backgroundColor: '$darkGreen',
-	borderRadius: '$rounded',
-	boxShadow: '$base',
-	color: 'white',
-	display: 'inline-flex',
-	padding: '$1 $2',
+	'alignItems': 'center',
+	'backgroundColor': '$darkGreen',
+	'borderRadius': '$rounded',
+	'boxShadow': '$base',
+	'color': 'white',
+	'display': 'inline-flex',
+	'padding': '$1 $2',
+	'transition': '.1s all',
+
+	'&:hover, &[data-state="open"]': {
+		backgroundColor: '$darkerGreen',
+	},
 });
 
 export const Balance = styled('span', {
@@ -46,7 +51,7 @@ export const WalletAddressString = styled('span', {
 export const Content = styled(DropdownMenu.Content, {
 	backgroundColor: 'white',
 	borderRadius: '$rounded',
-	boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
+	boxShadow: '$lg',
 	marginTop: '$2',
 	paddingBlock: '$1',
 	width: '250px',
@@ -57,8 +62,10 @@ export const Item = styled(DropdownMenu.Item, {
 	'padding': '$1 $3',
 	'userSelect': 'none',
 	'outline': 'none',
+	'transition': '.1s all',
 
 	'&:focus, &:hover': {
-		backgroundColor: '$lightGreen',
+		backgroundColor: '$darkerGreen',
+		color: 'white',
 	},
 });

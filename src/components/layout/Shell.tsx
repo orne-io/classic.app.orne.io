@@ -19,7 +19,7 @@ const ShellWrapper = styled(Grid, {
 	},
 
 	'> aside': {
-		gridAre: 'aside',
+		gridArea: 'aside',
 	},
 
 	'main': {

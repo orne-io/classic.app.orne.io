@@ -6,8 +6,8 @@ const StyledLink = styled(RouterLink, {
 	'alignItems': 'center',
 	'display': 'inline-flex',
 	'color': 'inherit',
-	'fontSize': '$base',
-	'gap': '$2',
+	'fontSize': '$lg',
+	'gap': '$3',
 	'textDecoration': 'none',
 
 	'&:focus, &:hover': {

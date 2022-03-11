@@ -13,13 +13,15 @@ const SidebarWrapper = styled('aside', {
 });
 
 const Icon = styled('img', {
+	borderRadius: '50%',
+	boxShadow: '$base',
 	height: '50px',
 });
 
 export function Sidebar() {
 	return (
 		<SidebarWrapper>
-			<Flex direction="column" gap={4}>
+			<Flex direction="column" gap={5}>
 				<Link to="/swap">
 					<Icon src="/icons/swap.svg" alt="" />
 					Swap

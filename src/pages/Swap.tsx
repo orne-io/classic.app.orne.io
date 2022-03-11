@@ -11,7 +11,7 @@ export function Swap() {
 	const [swapDirection, setSwapDirection] = useState<SwapDirection>(SwapDirection.UstToOrne);
 
 	return (
-		<Grid gap={2}>
+		<Grid gap={5}>
 			<Grid as="header" gap={2}>
 				<Heading css={{ borderLeft: '5px solid $textColor', pl: '$3' }}>Swap</Heading>
 				<Paragraph>Instantly trade $ORNE and UST</Paragraph>

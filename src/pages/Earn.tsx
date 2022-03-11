@@ -43,7 +43,7 @@ export function Earn() {
 	}
 
 	return (
-		<Grid gap={2}>
+		<Grid gap={5}>
 			<Grid as="header" gap={2}>
 				<Heading css={{ borderLeft: '5px solid $textColor', pl: '$3' }}>Earn</Heading>
 				<Paragraph>Stake your tokens to earn ORNE</Paragraph>
@@ -56,7 +56,7 @@ export function Earn() {
 					gap={3}
 					css={{ backgroundColor: '$lightGreen', borderRadius: '$rounded', boxShadow: '$base', p: '$3' }}
 				>
-					<Flex alignSelf="center">
+					<Flex alignSelf="center" gap={2}>
 						<TokenPair>
 							<TokenIcon>
 								<img src="/images/orne-logo.svg" alt="Orne" />
