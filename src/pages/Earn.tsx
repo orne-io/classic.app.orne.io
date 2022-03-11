@@ -54,7 +54,7 @@ export function Earn() {
 					align="start"
 					justify="between"
 					gap={3}
-					css={{ backgroundColor: '$lightGreen', borderRadius: '$rounded', p: '$3' }}
+					css={{ backgroundColor: '$lightGreen', borderRadius: '$rounded', boxShadow: '$base', p: '$3' }}
 				>
 					<Flex alignSelf="center">
 						<TokenPair>

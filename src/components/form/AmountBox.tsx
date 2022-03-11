@@ -45,7 +45,7 @@ export function AmountBox({
 		<Flex
 			gap={2}
 			direction="column"
-			css={{ backgroundColor: '$lightGreen', borderRadius: '$rounded', p: '$2 $3', width: '100%' }}
+			css={{ backgroundColor: '$lightGreen', borderRadius: '$rounded', boxShadow: '$base', p: '$2 $3', width: '100%' }}
 		>
 			<Flex justify="between">
 				<Text>{label}</Text>

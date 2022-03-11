@@ -5,6 +5,7 @@ export const Trigger = styled(DropdownMenu.Trigger, {
 	alignItems: 'center',
 	backgroundColor: '$darkGreen',
 	borderRadius: '$rounded',
+	boxShadow: '$base',
 	color: 'white',
 	display: 'inline-flex',
 	padding: '$1 $2',

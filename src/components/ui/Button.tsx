@@ -3,6 +3,7 @@ import { styled } from 'stitches.config';
 export const Button = styled('button', {
 	'backgroundColor': '$darkGreen',
 	'border': '2px solid transparent',
+	'boxShadow': '$base',
 	'color': 'white',
 	'cursor': 'pointer',
 	'padding': '$1 $3',
