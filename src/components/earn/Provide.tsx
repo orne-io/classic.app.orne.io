@@ -32,7 +32,7 @@ export function Provide() {
 				new Decimal(return_amount).plus(spread_amount).plus(commission_amount)
 		);
 
-		if (+readAmount(estimatedReturn) < +ust) {
+		if (+estimatedReturn > +ust) {
 			const estimatedReturn = await simulate({ amountUst: readAmount(ust) }).then(
 				({ return_amount, spread_amount, commission_amount }) =>
 					new Decimal(return_amount).plus(spread_amount).plus(commission_amount)
