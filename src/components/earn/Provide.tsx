@@ -32,13 +32,15 @@ export function Provide() {
 				new Decimal(return_amount).plus(spread_amount).plus(commission_amount)
 		);
 
-		if (+estimatedReturn > +ust) {
-			const estimatedReturn = await simulate({ amountUst: readAmount(ust) }).then(
+		// We are removing 3 UST to the user's balance to avoid being locked
+		const ustBalance = +ust - 3_000_000;
+		if (+estimatedReturn > ustBalance) {
+			const estimatedReturn = await simulate({ amountUst: readAmount(ustBalance) }).then(
 				({ return_amount, spread_amount, commission_amount }) =>
 					new Decimal(return_amount).plus(spread_amount).plus(commission_amount)
 			);
 
-			setAmountUst(readAmount(ust));
+			setAmountUst(readAmount(ustBalance));
 			setAmountOrne(readAmount(estimatedReturn));
 			setFetchingMax(false);
 			return;
