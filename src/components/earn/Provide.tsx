@@ -103,7 +103,15 @@ export function Provide() {
 
 		if (!amountOrne || !amountUst) return;
 
-		provide({ amountUst, amountOrne });
+		provide(
+			{ amountUst, amountOrne },
+			{
+				onSuccess() {
+					setAmountOrne('');
+					setAmountUst('');
+				},
+			}
+		);
 	}
 
 	if (!hasConnectedWallet) {

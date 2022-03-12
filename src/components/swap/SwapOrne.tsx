@@ -83,7 +83,14 @@ export function SwapOrne({ onChangeDirection }) {
 			return;
 		}
 
-		swap({ amountOrne: amount, slippage: slippage.toString() });
+		swap(
+			{ amountOrne: amount, slippage: slippage.toString() },
+			{
+				onSuccess() {
+					setAmount('');
+				},
+			}
+		);
 	}
 
 	function resetValues() {

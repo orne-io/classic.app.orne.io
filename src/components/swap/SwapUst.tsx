@@ -83,7 +83,14 @@ export function SwapUst({ onChangeDirection }) {
 			return;
 		}
 
-		swap({ amountUst: amount, slippage: slippage.toString() });
+		swap(
+			{ amountUst: amount, slippage: slippage.toString() },
+			{
+				onSuccess() {
+					setAmount('');
+				},
+			}
+		);
 	}
 
 	function resetValues() {

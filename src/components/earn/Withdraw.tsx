@@ -23,7 +23,14 @@ export function Withdraw() {
 	const hasConnectedWallet = connectedWallet !== undefined;
 
 	function handleSubmit() {
-		withdraw({ amount });
+		withdraw(
+			{ amount },
+			{
+				onSuccess() {
+					setAmount('');
+				},
+			}
+		);
 	}
 
 	if (!hasConnectedWallet) {
