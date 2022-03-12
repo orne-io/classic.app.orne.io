@@ -13,7 +13,7 @@ export function Slippage({ slippage, onSlippageChange }: Props) {
 	const [isCustomAmount, setIsCustomAmount] = useState(false);
 
 	function handleSlippageChange(slippage: number, isCustom = false) {
-		if (regex.test(slippage.toString())) {
+		if (regex.test(slippage.toString()) && slippage <= 50) {
 			setIsCustomAmount(isCustom);
 			onSlippageChange(slippage);
 		}
