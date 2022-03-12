@@ -33,7 +33,7 @@ export function Provide() {
 		);
 
 		// We are removing 3 UST to the user's balance to avoid being locked
-		const ustBalance = +ust - 3_000_000;
+		const ustBalance = +ust - 2_000_000;
 		if (+estimatedReturn > ustBalance) {
 			const estimatedReturn = await simulate({ amountUst: readAmount(ustBalance) }).then(
 				({ return_amount, spread_amount, commission_amount }) =>

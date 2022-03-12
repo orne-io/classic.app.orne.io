@@ -10,6 +10,7 @@ type Props = {
 	balance?: string | number;
 	denom: string;
 	value: string | null;
+	lowerMaxBy: number;
 	onChange?: Function;
 	loading?: boolean;
 	loadingBalance?: boolean;
@@ -25,6 +26,7 @@ export function AmountBox({
 	value,
 	onChange,
 	hasMax,
+	lowerMaxBy,
 	disabled,
 	loading,
 	loadingBalance,
@@ -37,7 +39,13 @@ export function AmountBox({
 
 	function setMaximumAmount() {
 		if (onChange) {
-			onChange(readAmount(balance));
+			let value = balance || 0;
+
+			if (lowerMaxBy) {
+				value = +value - lowerMaxBy * 1_000_000;
+			}
+
+			onChange(readAmount(value));
 		}
 	}
 

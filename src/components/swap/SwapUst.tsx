@@ -104,6 +104,7 @@ export function SwapUst({ onChangeDirection }) {
 				<AmountBox
 					hasConnectedWallet={connectedWallet !== undefined}
 					hasMax={true}
+					lowerMaxBy={2}
 					denom="UST"
 					balance={ust}
 					loadingBalance={isLoadingUst}
