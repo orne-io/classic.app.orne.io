@@ -43,7 +43,7 @@ export function Earn() {
 	}
 
 	return (
-		<Grid gap={5}>
+		<Flex direction={'column'} gap={5}>
 			<Grid as="header" gap={2}>
 				<Heading css={{ borderLeft: '5px solid $textColor', pl: '$3' }}>Earn</Heading>
 				<Paragraph>Stake your tokens to earn ORNE</Paragraph>
@@ -53,6 +53,7 @@ export function Earn() {
 				<Flex
 					align="start"
 					justify="between"
+					direction={{ '@initial': 'column', '@md': 'row' }}
 					gap={3}
 					css={{ backgroundColor: '$lightGreen', borderRadius: '$rounded', boxShadow: '$base', p: '$3' }}
 				>
@@ -69,7 +70,7 @@ export function Earn() {
 						<Box css={{ mr: 'auto', whiteSpace: 'nowrap' }}>ORNE / UST</Box>
 					</Flex>
 
-					<Flex direction="column" align="end">
+					<Flex direction="column" align={{ '@initial': 'start', '@md': 'end' }}>
 						<Text size={1}>APR</Text>
 						{isLoadingPool ? (
 							<Box css={{ mt: '$2' }}>
@@ -80,7 +81,7 @@ export function Earn() {
 						)}
 					</Flex>
 
-					<Flex direction="column" align="end">
+					<Flex direction="column" align={{ '@initial': 'start', '@md': 'end' }}>
 						<Text size={1}>Liquidity</Text>
 						{isLoadingPool ? (
 							<Box css={{ mt: '$2' }}>
@@ -91,7 +92,7 @@ export function Earn() {
 						)}
 					</Flex>
 
-					<Flex direction="column" align="end">
+					<Flex direction="column" align={{ '@initial': 'start', '@md': 'end' }}>
 						<Text size={1}>Staked</Text>
 						{isLoadingLpBalance ? (
 							<Box css={{ mt: '$2' }}>
@@ -102,7 +103,7 @@ export function Earn() {
 						)}
 					</Flex>
 
-					<Flex direction="column" align="end">
+					<Flex direction="column" align={{ '@initial': 'start', '@md': 'end' }}>
 						<Text size={1}>Rewards</Text>
 						{isLoadingReward ? (
 							<Box css={{ mt: '$2' }}>
@@ -137,6 +138,6 @@ export function Earn() {
 			</Grid>
 
 			{sectionToDisplay === EarnSection.Provide ? <Provide /> : <Withdraw />}
-		</Grid>
+		</Flex>
 	);
 }

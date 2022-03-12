@@ -31,7 +31,7 @@ export function Withdraw() {
 	}
 
 	return (
-		<Grid gap={2}>
+		<Flex direction={'column'} gap={2}>
 			<Flex align="center" gap={2}>
 				<Text>Withdraw ORNE / UST Liquidity</Text>
 			</Flex>
@@ -53,7 +53,9 @@ export function Withdraw() {
 				<Flex
 					align="center"
 					justify="between"
-					css={{ backgroundColor: '$lightGreen', borderRadius: '$rounded', p: '$2 $3' }}
+					direction={{ '@initial': 'column', '@md': 'row' }}
+					gap={{ '@initial': 3, '@md': 1 }}
+					css={{ backgroundColor: '$lightGreen', borderRadius: '$rounded', boxShadow: '$base', p: '$2 $3' }}
 				>
 					<Flex gap={2}>
 						{isLoading ? (
@@ -88,6 +90,6 @@ export function Withdraw() {
 				</Flex>
 				<Button onClick={handleSubmit}>Withdraw</Button>
 			</Flex>
-		</Grid>
+		</Flex>
 	);
 }

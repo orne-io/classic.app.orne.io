@@ -15,6 +15,7 @@ type Props = {
 const StyledInput = styled('input', {
 	'backgroundColor': 'transparent',
 	'color': '$darkerGreen',
+	'minWidth': '0',
 	'height': '35px',
 	'fontSize': '$xl',
 

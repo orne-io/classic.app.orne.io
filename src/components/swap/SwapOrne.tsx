@@ -93,7 +93,7 @@ export function SwapOrne({ onChangeDirection }) {
 
 	return (
 		<Flex as="form" direction="column" autoComplete="off" onSubmit={handleSubmit}>
-			<Flex justify="between" css={{ width: '100%' }}>
+			<Flex justify="between" wrap={{ '@initial': 'wrap', '@md': 'noWrap' }} css={{ width: '100%' }}>
 				<AmountBox
 					hasConnectedWallet={connectedWallet !== undefined}
 					hasMax={true}
@@ -104,7 +104,7 @@ export function SwapOrne({ onChangeDirection }) {
 					onChange={setAmount}
 				/>
 
-				<Flex align="center" justify="center" css={{ p: '$3', width: '25%' }}>
+				<Flex align="center" justify="center" css={{ 'p': '$3', 'width': '100%', '@md': { width: '25%' } }}>
 					<ActionSeparator onClick={() => onChangeDirection()} css={{ cursor: 'pointer' }}>
 						<img src="/icons/swapping.svg" alt="" />
 					</ActionSeparator>
@@ -113,7 +113,7 @@ export function SwapOrne({ onChangeDirection }) {
 				<AmountBox label="Estimated" denom="UST" value={readAmount(estimatedUst)} loading={simulating} disabled />
 			</Flex>
 
-			<Flex align="start">
+			<Flex align="start" wrap={{ '@initial': 'wrap', '@md': 'noWrap' }}>
 				<Table values>
 					<tbody>
 						<tr>
@@ -145,7 +145,7 @@ export function SwapOrne({ onChangeDirection }) {
 
 				<Box css={{ p: '$3', width: '25%' }} />
 
-				<Flex gap={2} direction="column" css={{ px: '$3', width: '100%' }}>
+				<Flex gap={4} direction="column" css={{ 'px': '0', 'width': '100%', '@md': { px: '$3' } }}>
 					<Slippage slippage={slippage} onSlippageChange={(s) => setSlippage(s)} />
 
 					<Button type="submit" disabled={simulating}>

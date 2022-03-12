@@ -111,7 +111,7 @@ export function Provide() {
 	}
 
 	return (
-		<Grid as="form" gap={2} onSubmit={handleSubmit}>
+		<Flex direction={'column'} as="form" gap={2} onSubmit={handleSubmit}>
 			<Flex align="center" gap={2}>
 				<Text>Stake ORNE and UST</Text>
 				<Button type="button" size="small" outline="dark" onClick={useMaxAmount}>
@@ -119,7 +119,7 @@ export function Provide() {
 				</Button>
 			</Flex>
 
-			<Flex justify="between" css={{ width: '100%' }}>
+			<Flex justify="between" direction={{ '@initial': 'column', '@md': 'row' }} css={{ width: '100%' }}>
 				<AmountBox
 					hasConnectedWallet={hasConnectedWallet}
 					denom="ORNE"
@@ -130,7 +130,7 @@ export function Provide() {
 					onChange={handleOrneAmountChange}
 				/>
 
-				<Flex align="center" justify="center" css={{ p: '$3', width: '25%' }}>
+				<Flex align="center" justify="center" css={{ 'p': '$3', 'width': '100%', '@md': { width: '25%' } }}>
 					<ActionSeparator>
 						<img src="/icons/plus.svg" alt="" />
 					</ActionSeparator>
@@ -150,6 +150,6 @@ export function Provide() {
 			<Flex align="start" justify="end">
 				<Button type="submit">Stake Tokens</Button>
 			</Flex>
-		</Grid>
+		</Flex>
 	);
 }

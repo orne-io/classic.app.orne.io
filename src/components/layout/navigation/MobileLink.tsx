@@ -9,7 +9,7 @@ const StyledLink = styled(RouterLink, {
 	'fontSize': '$sm',
 	'textDecoration': 'none',
 	'textAlign': 'center',
-	'color': '$darkGreen',
+	'color': '$darkerGreen',
 	'transition': '0.3s all',
 
 	'&::after': {
