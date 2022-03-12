@@ -1,6 +1,6 @@
 import Decimal from 'decimal.js';
 import { useMutation, useQueryClient } from 'react-query';
-import { toAmount } from '@terra.kitchen/utils';
+import { readAmount } from '@terra.kitchen/utils';
 import { useConnectedWallet } from '@terra-money/wallet-provider';
 import { MsgExecuteContract } from '@terra-money/terra.js';
 import { ORNE_QUERY_KEY, TERRA_QUERY_KEY } from 'client/cacheKeys';
@@ -42,7 +42,7 @@ export function useWithdrawLiquidity() {
 
 		pushTransaction({
 			tx,
-			customToastMessage: `Withdrew ${toAmount(params.amount, { decimals: 0, comma: true })} LP`,
+			customToastMessage: `Withdrew ${readAmount(params.amount, { decimals: 0, comma: true })} LP`,
 			callback: () => {
 				void queryClient.invalidateQueries(TERRA_QUERY_KEY.TERRA_NATIVE_BALANCES);
 				void queryClient.invalidateQueries(ORNE_QUERY_KEY.ORNE_BALANCE);

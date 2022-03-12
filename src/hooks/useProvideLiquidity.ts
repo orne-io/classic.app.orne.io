@@ -1,6 +1,6 @@
 import Decimal from 'decimal.js';
 import { useMutation, useQueryClient } from 'react-query';
-import { toAmount } from '@terra.kitchen/utils';
+import { readAmount } from '@terra.kitchen/utils';
 import { Coin, MsgExecuteContract } from '@terra-money/terra.js';
 import { useConnectedWallet } from '@terra-money/wallet-provider';
 import { useApp } from 'hooks/useApp';
@@ -73,7 +73,7 @@ export function useProvideLiquidity() {
 
 		pushTransaction({
 			tx,
-			customToastMessage: `Provided ${toAmount(params.amountOrne, { decimals: 0, comma: true })} $ORNE & ${toAmount(
+			customToastMessage: `Provided ${readAmount(params.amountOrne, { decimals: 0, comma: true })} ORNE & ${readAmount(
 				params.amountUst,
 				{
 					decimals: 0,

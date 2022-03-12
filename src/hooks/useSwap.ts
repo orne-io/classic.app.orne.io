@@ -1,7 +1,7 @@
 import Decimal from 'decimal.js';
 import { useCallback } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
-import { toAmount } from '@terra.kitchen/utils';
+import { readAmount } from '@terra.kitchen/utils';
 import { Coin, MsgExecuteContract } from '@terra-money/terra.js';
 import { useConnectedWallet } from '@terra-money/wallet-provider';
 import { ORNE_QUERY_KEY, TERRA_QUERY_KEY } from 'client/cacheKeys';
@@ -36,7 +36,7 @@ export function useSwap() {
 
 			pushTransaction({
 				tx,
-				customToastMessage: `Swapped ${toAmount(params.amountUst, { decimals: 0, comma: true })} UST`,
+				customToastMessage: `Swapped ${readAmount(params.amountUst, { decimals: 0, comma: true })} UST`,
 				callback() {
 					void queryClient.invalidateQueries(TERRA_QUERY_KEY.TERRA_NATIVE_BALANCES);
 					void queryClient.invalidateQueries(ORNE_QUERY_KEY.ORNE_BALANCE);
@@ -59,7 +59,7 @@ export function useSwap() {
 
 		pushTransaction({
 			tx,
-			customToastMessage: `Swapped ${toAmount(params.amountOrne, { decimals: 0, comma: true })} $ORNE`,
+			customToastMessage: `Swapped ${readAmount(params.amountOrne, { decimals: 0, comma: true })} ORNE`,
 			callback() {
 				void queryClient.invalidateQueries(TERRA_QUERY_KEY.TERRA_NATIVE_BALANCES);
 				void queryClient.invalidateQueries(ORNE_QUERY_KEY.ORNE_BALANCE);
