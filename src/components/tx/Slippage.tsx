@@ -53,6 +53,7 @@ export function Slippage({ slippage, onSlippageChange }: Props) {
 					value={(isCustomAmount && slippage.toString()) || ''}
 					onChange={(e) => handleSlippageChange(+e.target.value, true)}
 					data-active={isCustomAmount || null}
+					placeholder="0.5%"
 				/>
 			</Flex>
 		</SlippageControl>
@@ -87,8 +88,12 @@ const SlippageControl = styled(Flex, {
 	},
 
 	"input[type='text']": {
-		marginRight: 0,
-		padding: '0 $1',
-		textAlign: 'center',
+		'marginRight': 0,
+		'padding': '0 $1',
+		'textAlign': 'center',
+
+		'&::placeholder': {
+			opacity: 0.5,
+		},
 	},
 });
