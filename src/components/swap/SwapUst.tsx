@@ -84,7 +84,7 @@ export function SwapUst({ onChangeDirection }) {
 		}
 
 		swap(
-			{ amountUst: amount, slippage: slippage.toString() },
+			{ amountUst: amount, slippage: slippage.toString(), beliefPrice: pricePerOrne },
 			{
 				onSuccess() {
 					setAmount('');

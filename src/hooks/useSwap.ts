@@ -8,7 +8,7 @@ import { ORNE_QUERY_KEY, TERRA_QUERY_KEY } from 'client/cacheKeys';
 import { useApp } from 'hooks/useApp';
 import { usePendingTransaction } from 'hooks/usePendingTransaction';
 
-type SwapParams = { slippage: string } & (SwapUstParams | SwapOrneParams);
+type SwapParams = { slippage: string; beliefPrice: string } & (SwapUstParams | SwapOrneParams);
 type SwapUstParams = { amountUst: string };
 type SwapOrneParams = { amountOrne: string };
 
@@ -21,7 +21,7 @@ export function useSwap() {
 
 	const { mutate, status } = useMutation(async (params: SwapParams) => {
 		if ('amountUst' in params) {
-			const query = computeSwapUstToOrneMessage(params.amountUst, params.slippage);
+			const query = computeSwapUstToOrneMessage(params.amountUst, params.slippage, params.beliefPrice);
 
 			const msg = new MsgExecuteContract(connectedWallet!.walletAddress, contractAddress.pair, query, [
 				new Coin('uusd', new Decimal(params.amountUst).times(1_000_000)),
@@ -46,7 +46,7 @@ export function useSwap() {
 			return;
 		}
 
-		const query = computeSwapOrne(params.amountOrne, params.slippage);
+		const query = computeSwapOrne(params.amountOrne, params.slippage, params.beliefPrice);
 
 		const msg = new MsgExecuteContract(connectedWallet!.walletAddress, contractAddress.token, query);
 
@@ -79,7 +79,7 @@ export function useComputeSwapOrneToUstMessage() {
 	const { contractAddress } = useApp();
 
 	return useCallback(
-		(amount: string, slippage: string) => {
+		(amount: string, slippage: string, beliefPrice: string) => {
 			return {
 				send: {
 					amount: new Decimal(amount).times(1_000_000).toString(),
@@ -87,7 +87,7 @@ export function useComputeSwapOrneToUstMessage() {
 					msg: btoa(
 						JSON.stringify({
 							swap: {
-								// belief_price: new Decimal(beliefPrice).dividedBy(1_000_000).toString(),
+								belief_price: beliefPrice,
 								max_spread: new Decimal(slippage).dividedBy(100).toString(),
 							},
 						})
@@ -99,10 +99,10 @@ export function useComputeSwapOrneToUstMessage() {
 	);
 }
 
-export function computeSwapUstToOrneMessage(amount: string, slippage: string) {
+export function computeSwapUstToOrneMessage(amount: string, slippage: string, beliefPrice: string) {
 	return {
 		swap: {
-			// belief_price: new Decimal(beliefPrice).dividedBy(1_000_000).toString(),
+			belief_price: beliefPrice,
 			max_spread: new Decimal(slippage).dividedBy(100).toString(),
 			offer_asset: {
 				amount: new Decimal(amount).times(1_000_000).toString(),

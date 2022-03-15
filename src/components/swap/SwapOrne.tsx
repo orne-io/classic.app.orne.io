@@ -74,6 +74,8 @@ export function SwapOrne({ onChangeDirection }) {
 
 	const pricePerOrne =
 		amount && estimate ? new Decimal(estimatedUst).dividedBy(amount).dividedBy(1_000_000).toFixed(6) : '0';
+	const pricePerUst =
+		amount && estimate ? new Decimal(amount).dividedBy(estimatedUst).times(1_000_000).toFixed(6) : '0';
 	const feePrice = fee?.amount?.get('uusd')?.amount.dividedBy(1_000_000).toFixed(6) || '0';
 
 	function handleSubmit(e: FormEvent) {
@@ -84,7 +86,7 @@ export function SwapOrne({ onChangeDirection }) {
 		}
 
 		swap(
-			{ amountOrne: amount, slippage: slippage.toString() },
+			{ amountOrne: amount, slippage: slippage.toString(), beliefPrice: pricePerUst },
 			{
 				onSuccess() {
 					setAmount('');
