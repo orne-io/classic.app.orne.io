@@ -35,7 +35,7 @@ export function Earn() {
 
 		const liquidity = pool.ust.plus(pool.orne.times(pool.orne_price));
 		setLiquidity(liquidity);
-		setAPR(new Dec(10_000_00).times(pool.orne_price).dividedBy(readAmount(liquidity.dividedBy(100))));
+		setAPR(new Dec(10_000_00).times(pool.orne_price).dividedBy(readAmount(liquidity.dividedBy(10))));
 	}, [pool]);
 
 	function handleClaimReward() {
