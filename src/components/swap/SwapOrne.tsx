@@ -122,7 +122,7 @@ export function SwapOrne({ onChangeDirection }) {
 				<AmountBox label="Estimated" denom="UST" value={readAmount(estimatedUst)} loading={simulating} disabled />
 			</Flex>
 
-			<Flex align="start" wrap={{ '@initial': 'wrap', '@md': 'noWrap' }}>
+			<Flex align="start" wrap={{ '@initial': 'wrap', '@md': 'noWrap' }} css={{ mt: '$3' }}>
 				<Table values>
 					<tbody>
 						<tr>

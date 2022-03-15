@@ -121,7 +121,7 @@ export function SwapUst({ onChangeDirection }) {
 				<AmountBox label="Estimated" denom="ORNE" value={readAmount(estimatedOrne)} loading={simulating} disabled />
 			</Flex>
 
-			<Flex align="start" wrap={{ '@initial': 'wrap', '@md': 'noWrap' }}>
+			<Flex align="start" wrap={{ '@initial': 'wrap', '@md': 'noWrap' }} css={{ mt: '$3' }}>
 				<Table values>
 					<tbody>
 						<tr>
