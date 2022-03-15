@@ -19,7 +19,7 @@ export function AppProviders({ children, walletConnectChainIds, defaultNetwork }
 	globalStyles();
 
 	return (
-		<WalletProvider defaultNetwork={walletConnectChainIds[0]} walletConnectChainIds={walletConnectChainIds}>
+		<WalletProvider defaultNetwork={defaultNetwork} walletConnectChainIds={walletConnectChainIds}>
 			<BrowserRouter>
 				<QueryClientProvider client={queryClient}>
 					<OrneProvider>
