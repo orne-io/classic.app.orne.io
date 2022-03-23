@@ -21,7 +21,7 @@ export function useLpBalance() {
 			});
 		},
 		{
-			staleTime: parse('1m'),
+			staleTime: parse('1m')!,
 		}
 	);
 }

@@ -31,6 +31,7 @@ export function useLpReward() {
 			return lcd.wasm.contractQuery<PendingTokenQueryResult>(contractAddress.astroGenerator, msg);
 		},
 		{
+			staleTime: parse('1m')!,
 			refetchInterval: parse('5m')!,
 		}
 	);
